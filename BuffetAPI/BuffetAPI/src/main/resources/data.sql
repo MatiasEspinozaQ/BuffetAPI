@@ -1,1 +1,0 @@
-insert into Cliente values (1,'prueba' ,'prueba')
