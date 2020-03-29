@@ -1,10 +1,8 @@
-package com.CAT.BuffetAPI.Service;
+package com.CAT.BuffetAPI.Services;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class AuthService {
 		
 		 App_user finalUser = null;
 		 
-		 finalUser = appUserRepository.findById(id).orElse(null);
+		 finalUser = appUserRepository.getOne(id);
 		 
 	
 		 if(finalUser != null && finalUser.getHash().equals(passwd))
