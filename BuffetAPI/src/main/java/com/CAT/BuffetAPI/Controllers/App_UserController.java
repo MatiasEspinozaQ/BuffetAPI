@@ -27,19 +27,19 @@ public class App_UserController {
 	
 	
 	
-	@RequestMapping("/app_users")
+	@RequestMapping("/app_users/")
 	private Optional<App_user> getSpecificUser(@RequestBody App_user user)
 	{
 		return app.getAppUser(user.getAppuser_id());
 	}
-	/*
-	@RequestMapping("/app_users")
+	
+	@RequestMapping("/Mecanicos")
 	private List<App_user> addUser()
 	{
-		return app.getAllUsers();
+		return app.getAllMecha();
 	}
 	
-	
+	/*
 	@RequestMapping("/app_users")
 	private List<App_user> updateUser()
 	{

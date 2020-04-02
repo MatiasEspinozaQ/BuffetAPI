@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.CAT.BuffetAPI.Entities.App_user;
-import com.CAT.BuffetAPI.Repositories.appUserRepository;
+import com.CAT.BuffetAPI.Repositories.App_UserRepository;
+
 
 
 
@@ -16,7 +17,7 @@ public class AuthService {
 	
 	
 	@Autowired
-	private appUserRepository appUserRepository;
+	private App_UserRepository appUserRepository;
 	
 	
 	public boolean Validate(String id, String passwd) {

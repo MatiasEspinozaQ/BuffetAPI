@@ -39,14 +39,6 @@ public class App_user {
 	private String user_type_id;
 	private String status_id;
 	private boolean isdelete;
-
-	
-	public boolean isIsdelete() {
-		return isdelete;
-	}
-	public void setIsdelete(boolean isdelete) {
-		this.isdelete = isdelete;
-	}
 	public String getAppuser_id() {
 		return appuser_id;
 	}
@@ -77,7 +69,6 @@ public class App_user {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 	public String getLast_names() {
 		return last_names;
 	}
@@ -120,7 +111,13 @@ public class App_user {
 	public void setStatus_id(String status_id) {
 		this.status_id = status_id;
 	}
-	
-	
+	public boolean isIsdelete() {
+		return isdelete;
+	}
+	public void setIsdelete(boolean isdelete) {
+		this.isdelete = isdelete;
+	}
+
+
 	
 }
