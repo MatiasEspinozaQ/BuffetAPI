@@ -63,7 +63,7 @@ public class AuthController {
 		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30));
 		sdf.applyPattern("yyyy/MM/dd");
 		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
- 		if( auth.Validate(user.getAppuser_id(),DigestUtils.md5Hex(password)) && user != null){  //Se revisa que la contraseña corresponda al id de la persona.
+ 		if( auth.Validate(user.getAppuser_id(),password )&& user != null){  //Se revisa que la contraseña corresponda al id de la persona.
 			String jwt = Jwts.builder().signWith(SignatureAlgorithm.HS256, SecretKey)
 					.setSubject(user.getUsername())
 					.setIssuedAt(createdat)
