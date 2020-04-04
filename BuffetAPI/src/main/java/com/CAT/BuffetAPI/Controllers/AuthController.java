@@ -4,16 +4,17 @@ package com.CAT.BuffetAPI.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
 import org.apache.commons.codec.digest.*;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.CAT.BuffetAPI.Entities.App_user;
@@ -21,37 +22,63 @@ import com.CAT.BuffetAPI.Services.App_UserService;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-//Controlador dedicado a la inicio de sesion/autenticacion
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+//Controlador dedicado a la inicio de sesion/autenticacion
 @RestController
 public class AuthController {
-	
+	static final long ONE_MINUTE_IN_MILLIS=60000;
 	@Autowired
 	private AuthService auth;
 	
 	@Autowired
 	private App_UserService app;
-	//@Value("${jwt.secret}")
-	public List<authCredentials> Credenciales = new ArrayList<authCredentials>();
+	
+	@Value ("${secretKey}")
+	private String SecretKey;
+	
+	/*Recibe un json con un mail y una contraseña de la forma:
+	 * {
+	 * 		"email" : "email@servidor.com"
+	 * 		"hash"  : "contraseña"
+	 * }
+	 *
+	 *
+	 *devuelve token
+	
+	*/
+	
 	
 	@PostMapping("/user-auth")
-	public authCredentials Validate (@RequestBody ObjectNode json) {
-		authCredentials credentials = new authCredentials();
+	public ResponseEntity<JsonObject> Validate (@RequestBody ObjectNode json) {
 		String mail;
 		String password;
-		mail = json.get("email").asText();
+		Long tiempo = System.currentTimeMillis();
+		mail = json.get("email").asText(); 
 		password = json.get("hash").asText();
-		App_user user = app.getByEmail(mail);
-		if( auth.Validate(user.getAppuser_id(),DigestUtils.md5Hex(password)) && user != null){
-			credentials.authorized = true;
-			credentials.setToken(UUID.randomUUID().toString());
-			credentials.setUsername(user.getUsername());
-			Credenciales.add(credentials);
-			return credentials;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		Date createdat =(new Date(tiempo));
+		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30));
+		sdf.applyPattern("yyyy/MM/dd");
+		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
+ 		if( auth.Validate(user.getAppuser_id(),DigestUtils.md5Hex(password)) && user != null){  //Se revisa que la contraseña corresponda al id de la persona.
+			String jwt = Jwts.builder().signWith(SignatureAlgorithm.HS256, SecretKey)
+					.setSubject(user.getUsername())
+					.setIssuedAt(createdat)
+					.setExpiration(exp)
+					.claim("iss", "buffetapi.jaramillo.cl")
+					.claim("buffetapi.jaramillo.cl/is_admin", user.getUser_type_id().equals("1"))
+					.claim("userId", user.getAppuser_id())
+					.claim("Usertype", user.getUser_type_id())
+					.compact();
+			JsonObject jerson = Json.createObjectBuilder().add("JWT", jwt).build();
+			return new ResponseEntity<JsonObject>(jerson, HttpStatus.OK);
 		}
 		else
 		{
-			return credentials;
+			return new ResponseEntity<JsonObject>(HttpStatus.UNAUTHORIZED); //se retornan valores por defecto ("", falso, "")
 		}
 		
 	}
@@ -62,53 +89,6 @@ public class AuthController {
 		 user.setHash(DigestUtils.md5Hex(user.getHash()));
 	     app.addUser(user);
 	 }*/
-	public class authCredentials{
-		private String User_id = "";
-		private boolean authorized = false;
-		private String token = "";
-		
-		public String getUsername() {
-			return User_id;
-		}
-		public void setUsername(String username) {
-			User_id = username;
-		}
-		public boolean isAuthorized() {
-			return authorized;
-		}
-		public void setAuthorized(boolean authorized) {
-			this.authorized = authorized;
-		}
-		public String getToken() {
-			return token;
-		}
-		public void setToken(String token) {
-			this.token = token;
-		}
-		public authCredentials() {
-			
-		}
-		
-	}
-	public class authForm{
-		private String email;
-		public String getEmail() {
-			return email;
-		}
-		public void setEmail(String email) {
-			this.email = email;
-		}
-		public String getHash() {
-			return hash;
-		}
-		public void setHash(String hash) {
-			this.hash = hash;
-		}
-		public authForm(String email, String hash) {
-			super();
-			this.email = email;
-			this.hash = hash;
-		}
-		private String hash;
-	}
+	
+	
 }

@@ -57,7 +57,7 @@ public class App_UserService {
 		return meca;
 	}
 	
-	public App_user getByEmail(String email)
+	public App_user getByEmail(String Username)
 	{
 		 List<App_user> losMismisimos = new ArrayList<App_user>();
 		 Iterator<App_user> it = losMismisimos.iterator();
@@ -65,7 +65,7 @@ public class App_UserService {
 		app_UserRepository.findAll().forEach(u->{losMismisimos.add(u);});
 	
 		for(App_user user:losMismisimos) {
-			if(user.getEmail().equals(email)) {
+			if(user.getUsername().equals(Username)) {
 			elMismisimo = user;
 			break;
 			}
