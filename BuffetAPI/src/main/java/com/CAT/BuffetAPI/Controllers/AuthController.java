@@ -1,9 +1,8 @@
 package com.CAT.BuffetAPI.Controllers;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -63,6 +62,14 @@ public class AuthController {
 		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30));
 		sdf.applyPattern("yyyy/MM/dd");
 		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
+
+		if(user == null){
+			HttpHeaders errorHeaders = new HttpHeaders();
+    		errorHeaders.set("error-code", "ERR-AUTH-001");
+    		errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED);
+		}
+
  		if( auth.Validate(user.getAppuser_id(),password )&& user != null){  //Se revisa que la contraseña corresponda al id de la persona.
 			String jwt = Jwts.builder().signWith(SignatureAlgorithm.HS256, SecretKey)
 					.setSubject(user.getUsername())
@@ -78,7 +85,10 @@ public class AuthController {
 		}
 		else
 		{
-			return new ResponseEntity<JsonObject>(HttpStatus.UNAUTHORIZED); //se retornan valores por defecto ("", falso, "")
+			HttpHeaders errorHeaders = new HttpHeaders();
+    		errorHeaders.set("error-code", "ERR-AUTH-002");
+    		errorHeaders.set("error-desc", "Credenciales invalidas");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED);
 		}
 		
 	}
