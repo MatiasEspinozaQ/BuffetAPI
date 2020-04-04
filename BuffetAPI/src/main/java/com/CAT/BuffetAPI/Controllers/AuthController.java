@@ -51,13 +51,13 @@ public class AuthController {
 	*/
 	
 	
-	@PostMapping("/user-auth")
-	public ResponseEntity<JsonObject> Validate (@RequestBody ObjectNode json) {
+	@PostMapping(path = "/user-auth", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<JsonObject> Validate (App_user form_user) {
 		String mail;
 		String password;
 		Long tiempo = System.currentTimeMillis();
-		mail = json.get("email").asText(); 
-		password = json.get("hash").asText();
+		mail = form_user.getEmail(); 
+		password = form_user.getHash();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date createdat =(new Date(tiempo));
 		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30));
