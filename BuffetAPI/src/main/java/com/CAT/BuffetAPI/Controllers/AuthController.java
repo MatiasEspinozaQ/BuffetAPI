@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.codec.digest.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,7 @@ import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Services.App_UserService;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import com.sun.mail.iap.Response;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -56,11 +58,11 @@ public class AuthController {
 		String mail;
 		String password;
 		Long tiempo = System.currentTimeMillis();
-		mail = json.get("email").asText(); 
+		mail = json.get("username").asText(); //cambiado de email a username
 		password = json.get("hash").asText();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date createdat =(new Date(tiempo));
-		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30));
+		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30)); //aca se setea la fecha de expiracion, esta seteado en 30 minutos a partir de la fecha de creacion
 		sdf.applyPattern("yyyy/MM/dd");
 		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
  		if( auth.Validate(user.getAppuser_id(),password )&& user != null){  //Se revisa que la contraseña corresponda al id de la persona.
@@ -83,12 +85,20 @@ public class AuthController {
 		
 	}
 	
-	/* Für Later
-	 @PostMapping("/sign-up")
-     public void signUp(@RequestBody App_user user) {
-		 user.setHash(DigestUtils.md5Hex(user.getHash()));
+	
+	 @PostMapping("/register")
+     public void signUp(@RequestBody App_user user , HttpServletResponse resp) {
+		 if(auth.RegisterValidation(user)) {
 	     app.addUser(user);
-	 }*/
+	     	resp.setStatus(200);    
+	    
+		 }
+		 else
+		 {
+			resp.setStatus(403);
+			
+		 }
+	 }
 	
 	
 }

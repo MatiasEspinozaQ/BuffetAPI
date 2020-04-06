@@ -1,8 +1,7 @@
 package com.CAT.BuffetAPI.Services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +34,36 @@ public class AuthService {
 		 {
 			 return false;
 		 }
+	}
+	
+	public boolean RegisterValidation(App_user user) {
+		boolean sameUsername = false;
+		boolean sameEmail = false;
+		
+		List<App_user> users = appUserRepository.findAll();
+		
+		for(App_user u : users)
+		{
+			if(u.getUsername().equals(user.getUsername()))
+			{
+				sameUsername = true;
+			}
+			
+			if(u.getEmail().equals(user.getEmail()))
+			{
+				sameEmail = true;
+			}
+			
+		}
+		
+		
+		if(sameUsername || sameEmail)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
