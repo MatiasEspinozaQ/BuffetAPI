@@ -58,9 +58,7 @@ public class AuthController {
 		String password;
 		Long tiempo = System.currentTimeMillis();
 
-		mail = json.get("username").asText(); //cambiado de email a username
-		password = json.get("hash").asText();
-		mail = form_user.getEmail(); 
+		mail = form_user.getUsername(); 
 		password = form_user.getHash();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
