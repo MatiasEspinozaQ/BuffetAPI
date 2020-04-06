@@ -1,9 +1,8 @@
 package com.CAT.BuffetAPI.Controllers;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -53,18 +52,30 @@ public class AuthController {
 	*/
 	
 	
-	@PostMapping("/user-auth")
-	public ResponseEntity<JsonObject> Validate (@RequestBody ObjectNode json) {
+	@PostMapping(path = "/user-auth", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<JsonObject> Validate (App_user form_user) {
 		String mail;
 		String password;
 		Long tiempo = System.currentTimeMillis();
+
 		mail = json.get("username").asText(); //cambiado de email a username
 		password = json.get("hash").asText();
+		mail = form_user.getEmail(); 
+		password = form_user.getHash();
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date createdat =(new Date(tiempo));
 		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30)); //aca se setea la fecha de expiracion, esta seteado en 30 minutos a partir de la fecha de creacion
 		sdf.applyPattern("yyyy/MM/dd");
 		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
+
+		if(user == null){
+			HttpHeaders errorHeaders = new HttpHeaders();
+    		errorHeaders.set("error-code", "ERR-AUTH-001");
+    		errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED);
+		}
+
  		if( auth.Validate(user.getAppuser_id(),password )&& user != null){  //Se revisa que la contraseña corresponda al id de la persona.
 			String jwt = Jwts.builder().signWith(SignatureAlgorithm.HS256, SecretKey)
 					.setSubject(user.getUsername())
@@ -80,7 +91,10 @@ public class AuthController {
 		}
 		else
 		{
-			return new ResponseEntity<JsonObject>(HttpStatus.UNAUTHORIZED); //se retornan valores por defecto ("", falso, "")
+			HttpHeaders errorHeaders = new HttpHeaders();
+    			errorHeaders.set("error-code", "ERR-AUTH-002");
+    			errorHeaders.set("error-desc", "Credenciales invalidas");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED);
 		}
 		
 	}
