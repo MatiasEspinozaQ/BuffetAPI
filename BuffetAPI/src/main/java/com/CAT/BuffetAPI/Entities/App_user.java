@@ -1,15 +1,11 @@
 package com.CAT.BuffetAPI.Entities;
 
 import java.util.Date;
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class App_user {
 	
 	@Id
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(name = "appuser_id", columnDefinition = "VARCHAR(255)")
+	@GeneratedValue(generator="db-guid")
+	@GenericGenerator(name="db-guid", strategy = "guid") 
+	//@Column(name = "appuser_id", columnDefinition = "VARCHAR(255)")
 	private String appuser_id;
 	
 	private String username;
