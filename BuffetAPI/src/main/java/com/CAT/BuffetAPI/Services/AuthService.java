@@ -2,6 +2,8 @@ package com.CAT.BuffetAPI.Services;
 
 
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Repositories.App_UserRepository;
@@ -115,10 +118,8 @@ public class AuthService {
 			try {
 				newPassword = UUID.randomUUID().toString();
 				aux = newPassword;
-				Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-				SecretKeySpec secret_key = new SecretKeySpec(KeyForRecovery.getBytes(), "HmacSHA256");
-				sha256_HMAC.init(secret_key);
-				newPassword = Base64.encodeBase64String(sha256_HMAC.doFinal(newPassword.getBytes()));
+				MessageDigest digest = MessageDigest.getInstance("SHA-256");
+				newPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
 				user.setHash(newPassword);
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
 		        mailMessage.setTo(user.getEmail());
