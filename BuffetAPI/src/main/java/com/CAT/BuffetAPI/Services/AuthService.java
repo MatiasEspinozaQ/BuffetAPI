@@ -125,6 +125,7 @@ public class AuthService {
 
 		         
 				mailSender.sendEmail(mailMessage);
+				appService.updateUser(user);
 				return true;
 			}
 			catch(Exception e)
