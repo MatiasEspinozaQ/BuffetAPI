@@ -1,7 +1,6 @@
 package com.CAT.BuffetAPI.Entities;
 
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,7 +17,6 @@ public class App_user {
 	@Id
 	@GeneratedValue(generator="db-guid")
 	@GenericGenerator(name="db-guid", strategy = "guid") 
-	//@Column(name = "appuser_id", columnDefinition = "VARCHAR(255)")
 	private String appuser_id;
 	
 	private String username;
@@ -28,13 +26,15 @@ public class App_user {
 	private String last_names;
 	private String adress;
 	private String phone;
-	private String description;
+	private Date birthday;
+	private int mail_confirmed;
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date lastlogin;
+	
 	private String user_type_id;
 	private String status_id;
-	private boolean isdelete;
+	private boolean deleted;
 	public String getAppuser_id() {
 		return appuser_id;
 	}
@@ -83,12 +83,6 @@ public class App_user {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
 	public Date getLastlogin() {
 		return lastlogin;
 	}
@@ -107,13 +101,25 @@ public class App_user {
 	public void setStatus_id(String status_id) {
 		this.status_id = status_id;
 	}
-	public boolean isIsdelete() {
-		return isdelete;
+
+	public boolean isDeleted() {
+		return deleted;
 	}
-	public void setIsdelete(boolean isdelete) {
-		this.isdelete = isdelete;
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
-
+	public int getMailconfirmed() {
+		return mail_confirmed;
+	}
+	public void setMailconfirmed(int mailconfirmed) {
+		this.mail_confirmed = mailconfirmed;
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 	
 }
