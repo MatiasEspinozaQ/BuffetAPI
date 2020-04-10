@@ -46,20 +46,10 @@ public class App_UserService {
 		return meca;
 	}
 	
-	public App_user getByEmail(String Username)
+	public App_user getByEmail(String email)
 	{
-		 List<App_user> losMismisimos = new ArrayList<App_user>();
-		 App_user elMismisimo = null;
-		app_UserRepository.findAll().forEach(u->{losMismisimos.add(u);});
-	
-		for(App_user user:losMismisimos) {
-			if(user.getUsername().equals(Username)) {
-			elMismisimo = user;
-			break;
-			}
-		}
-		
-			return elMismisimo;
+		 
+			return app_UserRepository.getByEmail(email);
 	}
 
 

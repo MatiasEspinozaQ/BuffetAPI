@@ -106,22 +106,25 @@ public class AuthService {
 	{
 		App_user user;
 		String newPassword;
+		String aux;
+		
 		user = appService.getByEmail(email);
 		
 		if(user != null)
 		{
 			try {
 				newPassword = UUID.randomUUID().toString();
+				aux = newPassword;
 				Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
 				SecretKeySpec secret_key = new SecretKeySpec(KeyForRecovery.getBytes(), "HmacSHA256");
 				sha256_HMAC.init(secret_key);
 				newPassword = Base64.encodeBase64String(sha256_HMAC.doFinal(newPassword.getBytes()));
 				user.setHash(newPassword);
-				 SimpleMailMessage mailMessage = new SimpleMailMessage();
-		         mailMessage.setTo(user.getEmail());
-		         mailMessage.setSubject("Nueva Contraseña!");
-		         mailMessage.setFrom("userconfimationjaramillo@gmail.com");
-		         mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+newPassword+"\nPodras volver a cambiarla desde la aplicación");
+				SimpleMailMessage mailMessage = new SimpleMailMessage();
+		        mailMessage.setTo(user.getEmail());
+		        mailMessage.setSubject("Nueva Contraseña!");
+		        mailMessage.setFrom("userconfimationjaramillo@gmail.com");
+		        mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+aux+"\nPodras volver a cambiarla desde la aplicación");
 
 		         
 				mailSender.sendEmail(mailMessage);

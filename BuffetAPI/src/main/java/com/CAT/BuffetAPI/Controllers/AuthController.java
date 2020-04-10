@@ -155,7 +155,7 @@ public class AuthController {
 	        return modelAndView;
 	    }
 	    
-	    @RequestMapping(value="/Recover-pass", method= {RequestMethod.GET, RequestMethod.POST})
+	    @RequestMapping(value="/Recover-pass", method= {RequestMethod.GET, RequestMethod.POST},consumes = "application/x-www-form-urlencoded")
 	    public void Recuperacion(@RequestParam("email") String email, HttpServletResponse resp)
 	    {
 	    	if(auth.RecoverPassword(email)) {

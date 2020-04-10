@@ -7,5 +7,5 @@ import com.CAT.BuffetAPI.Entities.App_user;
 
 @RepositoryRestResource
 public interface App_UserRepository extends JpaRepository<App_user, String>{
-
+	App_user getByEmail(String email);
 }
