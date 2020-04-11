@@ -5,7 +5,7 @@ Endpoints API
 http://localhost:8888/user-auth (POST)           :Login (Nombre de usuario, hash)
 http://localhost:8888/user-auth/register         :Registro(Usuario completo, excepto id y weas para saber cuando se updateo)
 http://localhost:8888/user-auth/confirm-account  :Metodo que recibe un token de confirmacion de mail en un string.
-http://localhost:8888/user-auth//Recover-pass    :Recuperacion de contraseña, recibe email.
+http://localhost:8888/user-auth/Recover-pass    :Recuperacion de contraseña, recibe email.
 
 
 ==Administracion de Usuarios==

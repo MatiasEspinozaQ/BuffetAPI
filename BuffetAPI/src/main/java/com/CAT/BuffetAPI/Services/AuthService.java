@@ -31,59 +31,73 @@ import io.jsonwebtoken.Jwts;
 
 @Service
 public class AuthService {
-	
-	
+
+
 	@Autowired
 	private App_UserRepository appUserRepository;
 	@Autowired
 	private App_UserService appService;
-	
+
 	@Value ("${secretKey}")
 	private String SecretKey;
-	
+
 	@Value ("${secretKeyPassword}")
 	private String KeyForRecovery;
-	
+
 	@Autowired
 	private EmailSenderService mailSender;
-	
+
 	public Claims getClaims(String jwt) {
 		Claims claims = Jwts.parser()
-	            .setSigningKey(DatatypeConverter.parseBase64Binary(SecretKey))
-	            .parseClaimsJws(jwt).getBody();
-	    return claims;
+				.setSigningKey(DatatypeConverter.parseBase64Binary(SecretKey))
+				.parseClaimsJws(jwt).getBody();
+		return claims;
 	}
-	
-	public boolean Authorize(HttpServletRequest req, HttpServletResponse res,List<String> typesAllowed)
+
+	public boolean Authorize(String token,List<String> typesAllowed)
 	{
-		
-		return true;
-	
+		try {
+			Claims claims = getClaims(token);
+			if(typesAllowed.contains(claims.get("user_typeid",String.class)))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+
+
 	}
-	
+
 	public boolean Validate(String id, String passwd) {
-		
-		 App_user finalUser = null;
-		 
-		 finalUser = appUserRepository.getOne(id);
-		 
-	
-		 if(finalUser != null && finalUser.getHash().equals(passwd))
-		 {
-			 return true;
-		 }
-		 else
-		 {
-			 return false;
-		 }
+
+		App_user finalUser = null;
+
+		finalUser = appUserRepository.getOne(id);
+
+
+		if(finalUser != null && finalUser.getHash().equals(passwd))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	
+
 	public boolean RegisterValidation(App_user user) {
 		boolean sameUsername = false;
 		boolean sameEmail = false;
-		
+
 		List<App_user> users = appUserRepository.findAll();
-		
+
 		for(App_user u : users)
 		{
 			if(u.getUsername().equals(user.getUsername()))
@@ -110,9 +124,9 @@ public class AuthService {
 		App_user user;
 		String newPassword;
 		String aux;
-		
+
 		user = appService.getByEmail(email);
-		
+
 		if(user != null)
 		{
 			try {
@@ -122,12 +136,12 @@ public class AuthService {
 				newPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
 				user.setHash(newPassword);
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
-		        mailMessage.setTo(user.getEmail());
-		        mailMessage.setSubject("Nueva Contraseña!");
-		        mailMessage.setFrom("userconfimationjaramillo@gmail.com");
-		        mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+aux+"\nPodras volver a cambiarla desde la aplicación");
+				mailMessage.setTo(user.getEmail());
+				mailMessage.setSubject("Nueva Contraseña!");
+				mailMessage.setFrom("userconfimationjaramillo@gmail.com");
+				mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+aux+"\nPodras volver a cambiarla desde la aplicación");
 
-		         
+
 				mailSender.sendEmail(mailMessage);
 				appService.updateUser(user);
 				return true;
