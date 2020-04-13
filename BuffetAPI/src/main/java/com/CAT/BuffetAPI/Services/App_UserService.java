@@ -48,8 +48,12 @@ public class App_UserService {
 	
 	public App_user getByEmail(String email)
 	{
-		 
-			return app_UserRepository.getByEmail(email);
+		return app_UserRepository.getByEmail(email);
+	}
+	
+	public App_user getByUsername(String username)
+	{
+		return app_UserRepository.getByUsername(username);
 	}
 
 
@@ -74,7 +78,4 @@ public class App_UserService {
 	public void deleteUser(App_user user) {
 		 app_UserRepository.delete(user);
 	}
-	
-
-
 }

@@ -71,7 +71,7 @@ public class AuthController {
 		Date createdat =(new Date(tiempo));
 		Date exp= new Date(tiempo+(ONE_MINUTE_IN_MILLIS * 30)); //aca se setea la fecha de expiracion, esta seteado en 30 minutos a partir de la fecha de creacion
 		sdf.applyPattern("yyyy/MM/dd");
-		App_user user = app.getByEmail(mail); //se recupera un usuario con un mail igual al entregado en el login
+		App_user user = app.getByUsername(mail); //se recupera un usuario con un mail igual al entregado en el login
 
 		if(user == null){
 			HttpHeaders errorHeaders = new HttpHeaders();

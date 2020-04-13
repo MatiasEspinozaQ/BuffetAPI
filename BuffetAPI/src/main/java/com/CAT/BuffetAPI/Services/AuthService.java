@@ -58,7 +58,7 @@ public class AuthService {
 	{
 		try {
 			Claims claims = getClaims(token);
-			if(typesAllowed.contains(claims.get("user_typeid",String.class)))
+			if(typesAllowed.contains(claims.get("Usertype",String.class)))
 			{
 				return true;
 			}

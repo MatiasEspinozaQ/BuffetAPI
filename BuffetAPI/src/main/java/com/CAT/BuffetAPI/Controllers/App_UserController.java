@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class App_UserController {
 	private AuthService auth;
 	
 	@RequestMapping("/users")
-	private List<App_user> getAllUsers(HttpServletResponse res,@RequestParam("token") String token)
+	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token)
 	{
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
@@ -45,7 +46,7 @@ public class App_UserController {
 	
 	
 	@RequestMapping("/users/{Id}")
-	private Optional<App_user> getSpecificUser(HttpServletResponse res, @RequestParam("data") String id,@RequestParam("token") String token)
+	private Optional<App_user> getSpecificUser(HttpServletResponse res, @RequestParam("data") String id,@RequestHeader("token") String token)
 	{
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
