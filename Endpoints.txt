@@ -1,6 +1,9 @@
-Endpoints API
+				Endpoints API
 
-==Administracion de sesiones==
+
+/* ----------------------------------------------------------------------------------------------- */
+/* -------------------------------- Administracion de sesiones -------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
 
 http://localhost:8888/user-auth (POST)           :Login (Nombre de usuario, hash)
 http://localhost:8888/user-auth/register         :Registro(Usuario completo, excepto id y weas para saber cuando se updateo)
@@ -8,4 +11,31 @@ http://localhost:8888/user-auth/confirm-account  :Metodo que recibe un token de 
 http://localhost:8888/user-auth/Recover-pass    :Recuperacion de contraseña, recibe email.
 
 
-==Administracion de Usuarios==
+/* ----------------------------------------------------------------------------------------------- */
+/* -------------------------------- Administracion de Usuarios -------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+
+http://localhost:8888/user-adm/user-status		GET		
+	Recibe
+		Nada
+	Retorna
+		json con todos los user_status
+
+http://localhost:8888/user-adm/user-type			GET			
+	Recibe
+		Nada
+	Retorna
+		json con todos los user_type
+		
+http://localhost:8888/user-adm/users				GET			
+	Recibe
+		token		Token de Autorización
+	Retorna
+		json con todos los app_user
+		
+http://localhost:8888/user-adm/users/{userId}		GET			
+	Recibe
+		token		Token de Autorización
+	Retorna
+		json con el app_user que coincida con {userId}
+
