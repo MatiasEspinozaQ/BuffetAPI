@@ -44,13 +44,13 @@ values
     to_date ('13-abril-2020 10:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Automotriz J.D.C Suzuki',--title
-    'Servicio Suzuki.Chevrolet,Mazda, Mantenciones de kilometraje y desabolladura.Personal especializado en las marcas.Garantía por trabajos realizados.20 años de experiencia en el rubro.',--public_desc
+    'Servicio Suzuki.Chevrolet,Mazda, Mantenciones de kilometraje y desabolladura.Personal especializado en las marcas.GarantÃ­a por trabajos realizados.20 aÃ±os de experiencia en el rubro.',--public_desc
     'De 8:30 a 19:30, abierto toda la semana',--schedule
-    'Mecánica general, Mantenciones preventivas, Alineación, Balanceo, Frenos, Embrague, Afinamiento, Scanner, Limpieza de tapiz, Cambio de aceite, Tren delantero, Emergencia 24 horas,
+    'MecÃ¡nica general, Mantenciones preventivas, AlineaciÃ³n, Balanceo, Frenos, Embrague, Afinamiento, Scanner, Limpieza de tapiz, Cambio de aceite, Tren delantero, Emergencia 24 horas,
     Simunizado y encerado, Diagnostico Computarizado',--services
     'Automotriz J.D.C',--bussiness_name
-    'Calle Fernández Concha 146, Ñuñoa, Región Metropolitana',--adress
-    'Ñuñoa',--comuna
+    'Calle FernÃ¡ndez Concha 146, Ã‘uÃ±oa, RegiÃ³n Metropolitana',--adress
+    'Ã‘uÃ±oa',--comuna
     'Metropolitana',--region
     '(2)22744400',--landline
     '0',--mobile_number
@@ -68,16 +68,16 @@ values
     to_date ('05-abril-2020 11:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Kaiser Lubricentro',--title
-    'Kaiser Lubricentro un taller automotriz dedicado a dar servicios de lubricación en general tanto para vehículos bencineros como diesel. cambiamos el aceite de motor, caja de cambio, mecánica o automática, diferenciales, cajas de transparencias, dirección, hidráulica, etc.',--public_desc
+    'Kaiser Lubricentro un taller automotriz dedicado a dar servicios de lubricaciÃ³n en general tanto para vehÃ­culos bencineros como diesel. cambiamos el aceite de motor, caja de cambio, mecÃ¡nica o automÃ¡tica, diferenciales, cajas de transparencias, direcciÃ³n, hidrÃ¡ulica, etc.',--public_desc
     'De 9:30 a 18:30, de lunes a viernes',--schedule
     'CAMBIO DE ACEITE,El cambio de aceite se debe realizar cada 5.000 kms o cada 10.000 kms dependiento del aceite que se utilice.
-     AFINAMIENTO, El afinamiento se debe realizar cada 15.000 o 20.000 kms. (Una vez al año aproximadamente)
-     MECANICA,Mecánica express consiste en trabajos que tardan desde 2 hrs. a 1 día o 2 dependiendo de lo que necesite.
+     AFINAMIENTO, El afinamiento se debe realizar cada 15.000 o 20.000 kms. (Una vez al aÃ±o aproximadamente)
+     MECANICA,MecÃ¡nica express consiste en trabajos que tardan desde 2 hrs. a 1 dÃ­a o 2 dependiendo de lo que necesite.
      ACCESORIOS,Accesorios para diferentes cosas del auto, dependiendo de lo que necesite.',--services
     'Kaiser Lubricentro',--bussiness_name
-    'Avenida Colón 2878,Valparaíso, Región V',--adress
-    'Valparaíso',--comuna
-    'Región V',--region
+    'Avenida ColÃ³n 2878,ValparaÃ­so, RegiÃ³n V',--adress
+    'ValparaÃ­so',--comuna
+    'RegiÃ³n V',--region
     '(32)2492905',--landline
     '0',--mobile_number
     'KaiserContacto@gmail.com',--email
@@ -97,3 +97,4 @@ alter table PUBLICATION
 add constraint mechanic_verify
 check (user_type_id='MEC');
 
+commit;
