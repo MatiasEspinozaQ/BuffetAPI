@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.binary.Base64;
-
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -123,7 +123,6 @@ public class AuthService {
 	{
 		App_user user;
 		String newPassword;
-		String aux;
 
 		user = appService.getByEmail(email);
 
@@ -131,15 +130,14 @@ public class AuthService {
 		{
 			try {
 				newPassword = UUID.randomUUID().toString();
-				aux = newPassword;
-				MessageDigest digest = MessageDigest.getInstance("SHA-256");
-				newPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
-				user.setHash(newPassword);
+				String hashedPassword;
+				hashedPassword = encode(KeyForRecovery, newPassword);
+				user.setHash(new String(hashedPassword));
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
 				mailMessage.setTo(user.getEmail());
 				mailMessage.setSubject("Nueva Contraseña!");
 				mailMessage.setFrom("userconfimationjaramillo@gmail.com");
-				mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+aux+"\nPodras volver a cambiarla desde la aplicación");
+				mailMessage.setText("Ya que olvidaste tu contraseña hemos creado una nueva para ti :3\n\nTu nueva contraseña es "+newPassword+"\nPodras volver a cambiarla desde la aplicación");
 
 
 				mailSender.sendEmail(mailMessage);
@@ -157,4 +155,12 @@ public class AuthService {
 		}
 
 	}
+	
+	public static String encode(String key, String data) throws Exception {
+		  Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+		  SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
+		  sha256_HMAC.init(secret_key);
+
+		  return Hex.encodeHexString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
+		}
 }
