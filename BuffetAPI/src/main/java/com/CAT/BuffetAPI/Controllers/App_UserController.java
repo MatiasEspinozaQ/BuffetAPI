@@ -8,6 +8,7 @@ import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.CAT.BuffetAPI.Entities.App_user;
+import com.CAT.BuffetAPI.Entities.User_status;
+import com.CAT.BuffetAPI.Entities.User_type;
 import com.CAT.BuffetAPI.Entities.User_type;
 import com.CAT.BuffetAPI.Repositories.userTypeRepository;
 import com.CAT.BuffetAPI.Services.App_UserService;
@@ -74,6 +77,56 @@ public class App_UserController {
 		}
 	}
 	
+	@RequestMapping("/user-type")
+	private List<User_type> getAllTypes(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<User_type> typeList = app.getAllTypes();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
+	@RequestMapping("/user-status")
+	private List<User_status> getAllStatys(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<User_status> typeList = app.getAllStatus();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
 	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.PUT})
 	private ResponseEntity<JsonObject> UpdateUser(@PathVariable String id, @RequestBody App_user user)
 	{

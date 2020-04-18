@@ -3,11 +3,16 @@ package com.CAT.BuffetAPI.Services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.CAT.BuffetAPI.Entities.App_user;
+import com.CAT.BuffetAPI.Entities.User_status;
+import com.CAT.BuffetAPI.Entities.User_type;
 import com.CAT.BuffetAPI.Repositories.App_UserRepository;
+import com.CAT.BuffetAPI.Repositories.userStatusRepository;
+import com.CAT.BuffetAPI.Repositories.userTypeRepository;
 
 
 
@@ -19,6 +24,7 @@ public class App_UserService {
 	@Autowired
 	private App_UserRepository app_UserRepository;
 	
+
 	//Muestra todos los usuarios que no esten eliminados logicamente
 	public List<App_user> getAllUsers()
 	{
@@ -78,4 +84,37 @@ public class App_UserService {
 	public void deleteUser(App_user user) {
 		 app_UserRepository.delete(user);
 	}
+
+	
+	@Autowired
+	private userTypeRepository user_appRepository;
+	
+	public List<User_type> getAllTypes(){
+		List<User_type> typeList = new ArrayList<User_type>();
+		user_appRepository.findAll().forEach(
+			p -> {
+				if(!p.isDeleted()) {
+					typeList.add(p);
+				}
+			}
+		);
+		return typeList;
+	}
+
+	
+	@Autowired
+	private userStatusRepository user_statusRepository;
+	
+	public List<User_status> getAllStatus(){
+		List<User_status> statusList = new ArrayList<User_status>();
+		user_statusRepository.findAll().forEach(
+			p -> {
+				if(!p.isDeleted()) {
+					statusList.add(p);
+				}
+			}
+		);
+		return statusList;
+	}
+
 }

@@ -16,7 +16,7 @@ public class User_status {
 	private String status;
 	@UpdateTimestamp
 	private Date updated_at;
-	private int deleted = 0;
+	private Boolean deleted;
 	@CreationTimestamp
 	private Date created_at;
 	
@@ -26,10 +26,10 @@ public class User_status {
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
 	}
-	public int isDeleted() {
+	public Boolean isDeleted() {
 		return deleted;
 	}
-	public void setDeleted(int deleted) {
+	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
 	public Date getCreated_at() {
