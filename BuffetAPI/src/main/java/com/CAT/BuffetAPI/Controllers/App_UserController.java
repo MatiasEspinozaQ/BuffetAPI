@@ -165,7 +165,7 @@ public class App_UserController {
 		}
 	}
 
-	@RequestMapping(value = "users/{id}/change-type", method = {RequestMethod.PUT})
+	@RequestMapping(value = "/users/{id}/change-type", method = {RequestMethod.PUT})
 	private ResponseEntity<JsonObject> CambiarEstado( @PathVariable String id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
 	{
 		HttpHeaders errorHeaders = new HttpHeaders();
