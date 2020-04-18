@@ -41,6 +41,21 @@ public class App_UserService {
 		return listaUsuarios;
 	}
 	
+	public List<App_user> getAllDeleted()
+	{
+		//Se crea lista que guardara todos los usuarios
+		List<App_user> listaUsuarios = new ArrayList<App_user>();
+		//Se revisan todos los usuarios y se añaden aquellos donde isDelete tiene valor negativo
+		app_UserRepository.findAll().forEach(
+				p ->{
+				if(p.isDeleted()) {
+					listaUsuarios.add(p);
+				}
+			}
+			);
+		return listaUsuarios;
+	}
+	
 	public List<App_user> getAllMecha()
 	{
 		List<App_user> meca = new ArrayList<App_user>();
