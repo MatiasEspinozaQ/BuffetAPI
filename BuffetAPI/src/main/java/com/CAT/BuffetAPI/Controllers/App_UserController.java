@@ -39,38 +39,85 @@ public class App_UserController {
 	@Autowired
 	private userTypeRepository type;
 
+
 	@RequestMapping("/users")
 	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token)
 	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(auth.Authorize(token, typesAllowed))
-		{
-			res.setStatus(200);
-			return app.getAllUsers();
-		}
-		else
-		{
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
 			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the all the Users
+			List<App_user> userList = app.getAllUsers();
+
+			if(userList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return userList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
 			return null;
 		}
 	}
 
 
 
-	@RequestMapping(value = "/users/{Id}", method= {RequestMethod.GET})
-	private Optional<App_user> getSpecificUser(HttpServletResponse res, @RequestParam("data") String id,@RequestHeader("token") String token)
+	@RequestMapping(value="/users/{Id}", method = {RequestMethod.GET})
+	private Optional<App_user> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
+		if(id.isEmpty() || token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
+		// Check for authorization
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(auth.Authorize(token, typesAllowed))
-		{
-			res.setStatus(200);
-			return app.getAppUser(id);
-		}
-		else
-		{
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
 			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return user;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
 			return null;
 		}
 	}
@@ -125,158 +172,152 @@ public class App_UserController {
 		}
 	}
 
-	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.PUT})
-	private ResponseEntity<JsonObject> UpdateUser(@PathVariable String id, @RequestBody App_user user,@RequestHeader("token") String token)
+	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
 	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
 		HttpHeaders errorHeaders = new HttpHeaders();
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(auth.Authorize(token, typesAllowed))
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		List<App_user> allUsers = new ArrayList<App_user>();
+		boolean existe = false;
+		allUsers = app.getAllUsers();
+		for(App_user u : allUsers)
 		{
-			List<App_user> allUsers = new ArrayList<App_user>();
-			boolean existe = false;
-			allUsers = app.getAllUsers();
-			for(App_user u : allUsers)
+			if(u.getAppuser_id().equals(Id))
 			{
-				if(u.getAppuser_id().equals(id))
-				{
-					existe = true;
-					break;
-				}
+				existe = true;
+				break;
 			}
+		}
 
-			if(existe) {
-				app.updateUser(user);
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+		if(existe) {
+			app.updateUser(user);
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 
-			}
-			else
-			{
-				errorHeaders.set("error-code", "ERR-AUTH-001");
-				errorHeaders.set("error-desc", "Usuario no existe");
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
-			}
 		}
 		else
 		{
-			errorHeaders.set("error-code", "ERR-AUTH-004");
-			errorHeaders.set("error-desc", "Token incorrecto");
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
 		}
 	}
 
-	@RequestMapping(value = "/users/{id}/change-type", method = {RequestMethod.PUT})
-	private ResponseEntity<JsonObject> CambiarEstado( @PathVariable String id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
+	@RequestMapping(value = "/users/{Id}/change-type", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
 	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
 		HttpHeaders errorHeaders = new HttpHeaders();
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(auth.Authorize(token, typesAllowed))
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		User_type theType = null;
+		for(User_type types : type.findAll())
 		{
-			User_type theType = null;
-			for(User_type types : type.findAll())
+			if(types.getUser_type_id().equals(userType))
 			{
-				if(types.getUser_type_id().equals(userType))
-				{
-					theType = types;
-				}
+				theType = types;
 			}
-			App_user user;
-			user = app.getAppUser(id).get();
+		}
+		App_user user;
+		user = app.getAppUser(Id).get();
 
-			if(user!= null)
+		if(user!= null)
+		{
+			if(theType != null)
 			{
-				if(theType != null)
-				{
-					user.setUser_type_id(theType.getUser_type_id());
-					app.updateUser(user);
-					return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-				}
-				else
-				{
-					errorHeaders.set("error-code", "ERR-AUTH-002");
-					errorHeaders.set("error-desc", "tipo de usuario no existe");
-					return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-				}
-
-
+				user.setUser_type_id(theType.getUser_type_id());
+				app.updateUser(user);
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 			}
 			else
 			{
-				errorHeaders.set("error-code", "ERR-AUTH-001");
-				errorHeaders.set("error-desc", "Usuario no existe");
+				errorHeaders.set("error-code", "ERR-AUTH-002");
+				errorHeaders.set("error-desc", "tipo de usuario no existe");
 				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
 			}
+
+
 		}
 		else
 		{
-			errorHeaders.set("error-code", "ERR-AUTH-004");
-			errorHeaders.set("error-desc", "Token incorrecto");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
 		}
-
 
 	}
 
 	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.DELETE})
-	private ResponseEntity<JsonObject> DeleteUser(@PathVariable String Id,@RequestHeader("token") String token)
+	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
 		HttpHeaders errorHeaders = new HttpHeaders();
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(auth.Authorize(token, typesAllowed))
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		List<App_user> allUsers = new ArrayList<App_user>();
+		boolean existe = false;
+		allUsers = app.getAllUsers();
+		App_user user = null;
+		for(App_user u : allUsers)
 		{
-			List<App_user> allUsers = new ArrayList<App_user>();
-			boolean existe = false;
-			allUsers = app.getAllUsers();
-			App_user user = null;
-			for(App_user u : allUsers)
+			if(u.getAppuser_id().equals(Id))
 			{
-				if(u.getAppuser_id().equals(Id))
-				{
-					existe = true;
-					user = u;
-					break;
-				}
+				existe = true;
+				user = u;
+				break;
 			}
+		}
 
-			if(existe) {
-				user.setDeleted(true);
-				app.updateUser(user);
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+		if(existe) {
+			user.setDeleted(true);
+			app.updateUser(user);
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 
-			}
-			else
-			{
-				errorHeaders.set("error-code", "ERR-AUTH-001");
-				errorHeaders.set("error-desc", "Usuario no existe");
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
-			}
 		}
 		else
 		{
-			errorHeaders.set("error-code", "ERR-AUTH-004");
-			errorHeaders.set("error-desc", "Token incorrecto");
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
 		}
+
+
 	}
 
 	@RequestMapping(value = "/users/Deleted", method= {RequestMethod.GET})
 	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
 	{
-
 		res.setStatus(200);
 		return app.getAllDeleted();
-	}
-	/*
-	Crear API que retorne los datos de un Usuario (GET) //getone?
-	Crear API que cambie los datos de un Usuario en base a un formulario (PUT) //Listo
-	Crear API que cambie el tipo de un Usuario (PUT) //Done
-	Crear API que que de de baja o alta a un Usuario (PUT)//
-	Crear API que retorne un listado de Usuarios eliminados usando composición para aplicar filtros (GET)
-	Crear API que que elimine de manera lógica un Usuario (DELETE)
-	 */
-
+	}	
 
 
 }

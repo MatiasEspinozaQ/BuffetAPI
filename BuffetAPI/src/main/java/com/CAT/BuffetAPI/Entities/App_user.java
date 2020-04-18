@@ -5,7 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -35,6 +38,11 @@ public class App_user {
 	private String user_type_id;
 	private String status_id;
 	private boolean deleted;
+	@UpdateTimestamp
+	private Date updated_at;
+	@CreationTimestamp
+	private Date created_at;
+	
 	public String getAppuser_id() {
 		return appuser_id;
 	}

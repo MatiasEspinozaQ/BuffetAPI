@@ -39,7 +39,7 @@ http://localhost:8888/user-adm/users/{userId}		GET
 	Retorna
 		json con el app_user que coincida con {userId}
 
-http://localhost:8888/user-adm/users/{Id}  PUT
+http://localhost:8888/user-adm/users/{Id}  POST
 	Recibe: Token, Json con todos los datos de un user.
 	Retorna: 200(OK) si todo esta correcto o 401(Unauthorized) si el usuario no existe
 
@@ -48,9 +48,9 @@ http://localhost:8888/user-adm/users/{Id}  DELETE
 	Retorna: 200(OK) si todo esta correcto o 401(Unauthorized) si el usuario no existe
 
 
-http://localhost:8888/user-adm/users/{id}/change-type PUT
+http://localhost:8888/user-adm/users/{id}/change-type POST
 	Recibe: Token, Json con un solo parametro "user_type" correspondiente al id nuevo.
-	Retorna: 200(OK) si todo esta correcto o 401(Unauthorized) si el tipo de usuario no existe o si el usuario no existe.
+	Retorna: 200(OK) si todo esta correcto o 401(Unauthorized) si el tipo de usuario no existe o si el usuario no existe. (Probado con x-www-form-urlencoded)
 
 http://localhost:8888/user-adm/users/Deleted
 	Recibe: nada

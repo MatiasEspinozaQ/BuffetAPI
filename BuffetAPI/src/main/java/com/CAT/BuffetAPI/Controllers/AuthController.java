@@ -110,6 +110,8 @@ public class AuthController {
 	@PostMapping("/register")
 	public void Register(@RequestBody App_user user , HttpServletResponse resp) {
 		if(auth.RegisterValidation(user)) {
+			user.setMailconfirmed(0);
+
 			app.addUser(user);
 			resp.setStatus(200);  
 			Verificationtoken verificationToken = new Verificationtoken(UUID.randomUUID().toString(),user.getAppuser_id());
@@ -143,7 +145,7 @@ public class AuthController {
 			aux = Userrepo.findById(token.getApp_userid());
 			App_user user;
 			user = aux.get();
-			user.setStatus_id("2");
+			user.setMailconfirmed(1);
 			app.updateUser(user);
 			verificationRepo.deleteById(token.getToken());
 			modelAndView.setViewName("accountVerified");
