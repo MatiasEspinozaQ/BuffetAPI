@@ -17,12 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.CAT.BuffetAPI.Entities.App_user;
-import com.CAT.BuffetAPI.Entities.User_status;
-import com.CAT.BuffetAPI.Entities.User_type;
-import com.CAT.BuffetAPI.Repositories.userTypeRepository;
 import com.CAT.BuffetAPI.Services.App_UserService;
 import com.CAT.BuffetAPI.Services.AuthService;
 
@@ -38,6 +34,7 @@ public class MechanicController {
 	@RequestMapping("/mechanics")
 	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token)
 	{
+		System.out.println("jiajiajia entramos");
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
@@ -54,9 +51,10 @@ public class MechanicController {
 
 		try {
 			// Get the all the Users
-			List<App_user> userList = app.getAllMecha();
-
-			if(app.getAllMecha() == null){
+			List<App_user> userList = app.getAllUsers();
+			
+			
+			if(userList.isEmpty()){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;

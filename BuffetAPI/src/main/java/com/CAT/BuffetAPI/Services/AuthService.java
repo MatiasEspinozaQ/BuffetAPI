@@ -57,21 +57,13 @@ public class AuthService {
 	public boolean Authorize(String token,List<String> typesAllowed)
 	{
 		try {
-			System.out.println("1");
 			Claims claims = getClaims(token);
-			System.out.println("2");
-			for(String tipo : typesAllowed)
-			{
-				System.out.println(tipo);
-			}
-			
-			System.out.println(claims.get("Usertype",String.class));
 			if(typesAllowed.contains(claims.get("Usertype",String.class)))
 			{
 				return true;
 			}
 			else
-			{	System.out.println("3");
+			{	
 				return false;
 			}
 		}

@@ -1,6 +1,8 @@
 package com.CAT.BuffetAPI.Controllers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -188,19 +190,15 @@ public class App_UserController {
 			res.setStatus(401);
 			return null;
 		}
-		List<App_user> allUsers = new ArrayList<App_user>();
-		boolean existe = false;
-		allUsers = app.getAllUsers();
-		for(App_user u : allUsers)
-		{
-			if(u.getAppuser_id().equals(Id))
-			{
-				existe = true;
-				break;
-			}
-		}
-
-		if(existe) {
+		System.out.println(Id);
+		
+		
+		if( app.getAppUser(user.getAppuser_id()).isPresent()) {
+			App_user old = app.getAppUser(user.getAppuser_id()).get();
+			user.setAppuser_id(old.getAppuser_id());
+			user.setLastlogin(old.getLastlogin());
+			user.setCreated_at(old.getCreated_at());
+			user.setUpdated_at(new Date());
 			app.updateUser(user);
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 
@@ -312,7 +310,7 @@ public class App_UserController {
 
 	}
 
-	@RequestMapping(value = "/users/Deleted", method= {RequestMethod.GET})
+	@RequestMapping(value = "/users/deleted", method= {RequestMethod.GET})
 	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
 	{
 		res.setStatus(200);

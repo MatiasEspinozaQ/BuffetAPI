@@ -111,7 +111,8 @@ public class AuthController {
 	public void Register(@RequestBody App_user user , HttpServletResponse resp) {
 		if(auth.RegisterValidation(user)) {
 			user.setMailconfirmed(0);
-
+			user.setUpdated_at(new Date());
+			user.setCreated_at(new Date());
 			app.addUser(user);
 			resp.setStatus(200);  
 			Verificationtoken verificationToken = new Verificationtoken(UUID.randomUUID().toString(),user.getAppuser_id());
