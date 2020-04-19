@@ -7,7 +7,7 @@ CREATE TABLE PUBLICATION(
     appuser_id              VARCHAR(32)		NOT NULL,
     user_type_id            VARCHAR(32)		NOT NULL,
     public_status_id        VARCHAR(32)		NOT NULL,
-    create_at               DATE,
+    created_at               DATE,
     update_at               DATE,
     deleted                 numeric(1),
     title                   VARCHAR(50)		NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE PUBLICATION(
     schedule                VARCHAR(50)            NOT NULL,
     services                VARCHAR2(500)	NOT NULL,
     bussiness_name          VARCHAR(50),
-    adress                  VARCHAR(100)	NOT NULL,
+    address                  VARCHAR(100)	NOT NULL,
     comuna                  VARCHAR(100)	NOT NULL,
     region                  VARCHAR(100)	NOT NULL,
     landline                VARCHAR(32),
@@ -28,7 +28,7 @@ CREATE TABLE PUBLICATION(
 CREATE TABLE PUBLIC_STATUS(
     public_status_id		VARCHAR(32)		NOT NULL PRIMARY KEY,
     status_name             VARCHAR(32)		NOT NULL,
-    create_at               DATE,
+    created_at               DATE,
     update_at               DATE,
     deleted                 NUMERIC(1)
 );
