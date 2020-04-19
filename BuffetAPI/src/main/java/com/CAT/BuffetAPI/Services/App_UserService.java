@@ -34,14 +34,15 @@ public class App_UserService {
 	{
 		//Se crea lista que guardara todos los usuarios
 		List<App_user> listaUsuarios = new ArrayList<App_user>();
+
 		//Se revisan todos los usuarios y se añaden aquellos donde isDelete tiene valor negativo
-		app_UserRepository.findAll().forEach(
-				p ->{
-					if(!p.isDeleted()) {
-						listaUsuarios.add(p);
-					}
-				}
-				);
+		app_UserRepository.findAll().forEach( p ->{
+			p.setHash(""); // Deja el hash vacio por seguridad
+			if(!p.isDeleted()) {
+				listaUsuarios.add(p);
+			}
+		});
+
 		return listaUsuarios;
 	}
 
@@ -52,6 +53,7 @@ public class App_UserService {
 		//Se revisan todos los usuarios y se añaden aquellos donde isDelete tiene valor negativo
 		app_UserRepository.findAll().forEach(
 				p ->{
+					p.setHash(""); // Deja el hash vacio por seguridad
 					if(p.isDeleted()) {
 						listaUsuarios.add(p);
 					}
@@ -64,12 +66,10 @@ public class App_UserService {
 	{
 		List<App_user> meca = new ArrayList<App_user>();
 		app_UserRepository.findAll().forEach(u ->{
-			System.out.println(u.getName());
-			System.out.println(u.getUser_type_id());
-			if( u.getUser_type_id().equals("MEC"))
-			{
+			if( u.getUser_type_id().equals("MEC") && !u.isDeleted())
+			{	
+				u.setHash(""); // Deja el hash vacio por seguridad
 				meca.add(u);
-				System.out.println("Added" + u.getName());
 			}
 		}
 		);

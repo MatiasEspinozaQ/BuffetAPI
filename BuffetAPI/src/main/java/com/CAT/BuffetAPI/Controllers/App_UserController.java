@@ -82,9 +82,8 @@ public class App_UserController {
 	}
 
 
-
 	@RequestMapping(value="/users/{Id}", method = {RequestMethod.GET})
-	private Optional<App_user> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
+	private App_user getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
 		if(id.isEmpty() || token.isEmpty()){
 			// 400 Bad Request
@@ -112,9 +111,12 @@ public class App_UserController {
 				return null;
 			}
 
+			App_user final_user = user.get();
+			final_user.setHash("");
+
 			// 200 OK
 			res.setStatus(200);
-			return user;
+			return final_user;
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
@@ -124,6 +126,7 @@ public class App_UserController {
 		}
 	}
 
+	
 	@RequestMapping("/user-type")
 	private List<User_type> getAllTypes(HttpServletResponse res){
 
@@ -149,6 +152,7 @@ public class App_UserController {
 		}
 	}
 
+	
 	@RequestMapping("/user-status")
 	private List<User_status> getAllStatys(HttpServletResponse res){
 
@@ -174,6 +178,7 @@ public class App_UserController {
 		}
 	}
 
+
 	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.POST})
 	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
 	{
@@ -198,6 +203,7 @@ public class App_UserController {
 			user.setAppuser_id(old.getAppuser_id());
 			user.setLastlogin(old.getLastlogin());
 			user.setCreated_at(old.getCreated_at());
+			user.setHash(old.getHash());
 			user.setUpdated_at(new Date());
 			app.updateUser(user);
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
@@ -210,6 +216,7 @@ public class App_UserController {
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
 		}
 	}
+
 
 	@RequestMapping(value = "/users/{Id}/change-type", method = {RequestMethod.POST})
 	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
@@ -264,6 +271,7 @@ public class App_UserController {
 
 	}
 
+
 	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.DELETE})
 	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
@@ -309,6 +317,7 @@ public class App_UserController {
 
 
 	}
+
 
 	@RequestMapping(value = "/users/deleted", method= {RequestMethod.GET})
 	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
