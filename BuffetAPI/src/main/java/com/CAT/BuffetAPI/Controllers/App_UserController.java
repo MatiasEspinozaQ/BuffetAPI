@@ -126,7 +126,7 @@ public class App_UserController {
 		}
 	}
 
-	
+
 	@RequestMapping("/user-type")
 	private List<User_type> getAllTypes(HttpServletResponse res){
 
@@ -152,7 +152,7 @@ public class App_UserController {
 		}
 	}
 
-	
+
 	@RequestMapping("/user-status")
 	private List<User_status> getAllStatys(HttpServletResponse res){
 
@@ -196,8 +196,8 @@ public class App_UserController {
 			return null;
 		}
 		System.out.println(Id);
-		
-		
+
+
 		if( app.getAppUser(user.getAppuser_id()).isPresent()) {
 			App_user old = app.getAppUser(user.getAppuser_id()).get();
 			user.setAppuser_id(old.getAppuser_id());
@@ -317,6 +317,82 @@ public class App_UserController {
 
 
 	}
+
+	@RequestMapping(value = "/users/{Id}/ban", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		App_user user;
+		user = app.getAppUser(Id).get();
+
+		if(user!= null )
+		{
+			user.setStatus_id("BAN");;
+			app.updateUser(user);
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+
+
+		}
+		else
+		{
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+		}
+
+	}
+
+	@RequestMapping(value = "/users/{Id}/unban", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> UnBan(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		App_user user;
+		user = app.getAppUser(Id).get();
+
+		if(user!= null )
+		{
+
+			user.setStatus_id("ACT");;
+			app.updateUser(user);
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+
+
+		}
+		else
+		{
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+		}
+
+	}
+
 
 
 	@RequestMapping(value = "/users/deleted", method= {RequestMethod.GET})

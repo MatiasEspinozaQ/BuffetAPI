@@ -52,6 +52,12 @@ http://localhost:8888/user-adm/users/{id}/change-type POST
 	Recibe: Token, Json con un solo parametro "user_type" correspondiente al id nuevo.
 	Retorna: 200(OK) si todo esta correcto o 401(Unauthorized) si el tipo de usuario no existe o si el usuario no existe. (Probado con x-www-form-urlencoded)
 
+http://localhost:8888/user-adm/users/{id}/ban POST
+http://localhost:8888/user-adm/users/{id}/unban POST
+	reciben:token
+	retornan: 200 o 401
+
+
 http://localhost:8888/user-adm/users/Deleted
 	Recibe: nada
 	Retorna: lista de todos los usuarios deleteados logicamente

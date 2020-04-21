@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.CAT.BuffetAPI.Entities.App_user;
+import com.CAT.BuffetAPI.Entities.User_type;
+import com.CAT.BuffetAPI.Repositories.userTypeRepository;
 import com.CAT.BuffetAPI.Services.App_UserService;
 import com.CAT.BuffetAPI.Services.AuthService;
 
@@ -31,7 +34,10 @@ public class MechanicController {
 	
 	@Autowired
 	private AuthService auth;
-
+	
+	@Autowired
+	private userTypeRepository type;
+	
 	@RequestMapping("/mechanics")
 	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token)
 	{
@@ -121,6 +127,97 @@ public class MechanicController {
 	}
 
 	
+	@RequestMapping(value = "/mechanics/{Id}/ban", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		
+		App_user user;
+		user = app.getAppUser(Id).get();
+
+		if(user!= null )
+		{
+			if(user.getUser_type_id().equals("MEC"))
+			{
+				user.setStatus_id("BAN");;
+				app.updateUser(user);
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+			}
+			else
+			{
+				errorHeaders.set("error-code", "ERR-AUTH-002");
+				errorHeaders.set("error-desc", "tipo de usuario no existe");
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+			}
+
+
+		}
+		else
+		{
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+		}
+
+	}
+	
+	@RequestMapping(value = "/mechanics/{Id}/unban", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> UnBan(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		
+		App_user user;
+		user = app.getAppUser(Id).get();
+
+		if(user!= null )
+		{
+			if(user.getUser_type_id().equals("MEC"))
+			{
+				user.setStatus_id("ACT");;
+				app.updateUser(user);
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+			}
+			else
+			{
+				errorHeaders.set("error-code", "ERR-AUTH-002");
+				errorHeaders.set("error-desc", "tipo de usuario no existe");
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+			}
+
+
+		}
+		else
+		{
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+		}
+
+	}
 
 	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.POST})
 	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
