@@ -1,6 +1,7 @@
 package com.CAT.BuffetAPI.Controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,31 +12,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.CAT.BuffetAPI.Entities.App_user;
-import com.CAT.BuffetAPI.Services.App_UserService;
+import com.CAT.BuffetAPI.Entities.Public_status;
+import com.CAT.BuffetAPI.Entities.Publication;
+import com.CAT.BuffetAPI.Entities.User_type;
+import com.CAT.BuffetAPI.Repositories.Public_statusRepository;
+import com.CAT.BuffetAPI.Repositories.PublicationRepository;
 import com.CAT.BuffetAPI.Services.AuthService;
+import com.CAT.BuffetAPI.Services.PublicationService;
 
 @RestController
-@RequestMapping("/mech-adm")
-public class MechanicController {
+@RequestMapping("/pub-adm")
+public class PublicationController {
 	@Autowired
-	App_UserService app;
+	private PublicationService pub;
+	@Autowired
+	private PublicationRepository pubrepo;
+	@Autowired
+	private Public_statusRepository statusRepo;
 	
 	@Autowired
 	private AuthService auth;
 
-	@RequestMapping("/mechanics")
-	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token)
+	@RequestMapping("/publications")
+	private List<Publication> getAllPublications(HttpServletResponse res, @RequestHeader("token") String token,
+												@RequestParam(required = false) String region
+												,@RequestParam(required = false) String public_status_id)
 	{
-	
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
@@ -52,10 +62,18 @@ public class MechanicController {
 
 		try {
 			// Get the all the Users
-			List<App_user> userList = app.getAllMecha();
+			HashMap<String,Object> data = new HashMap<>();
 			
+			if(region!= null)
+			{
+				data.put("region", region);
+			}
+			if(public_status_id!=null)
+			{
+				data.put("public_status_id", public_status_id);
+			}
 			
-			if(userList.isEmpty()){
+			if(pubrepo.getData(data).isEmpty()){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;
@@ -63,7 +81,7 @@ public class MechanicController {
 
 			// 200 OK
 			res.setStatus(200);
-			return userList;
+			return pubrepo.getData(data);
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
@@ -75,8 +93,8 @@ public class MechanicController {
 
 
 
-	@RequestMapping(value="/mechanics/{Id}", method = {RequestMethod.GET})
-	private Optional<App_user> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
+	@RequestMapping(value="/publications/{Id}", method = {RequestMethod.GET})
+	private Optional<Publication> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
 		if(id.isEmpty() || token.isEmpty()){
 			// 400 Bad Request
@@ -95,22 +113,18 @@ public class MechanicController {
 
 		try {
 			// Get the User
-			Optional<App_user> user = app.getAppUser(id);
+			Optional<Publication> publication = pub.getOnePublication(id);
 
 			// If there is no matching User
-			if(!user.isPresent()){
+			if(!publication.isPresent()){
 				// 404 Not Found
-				res.setStatus(404);
-				return null;
-			}
-			if(!user.get().getUser_type_id().equals("MEC")) {
 				res.setStatus(404);
 				return null;
 			}
 
 			// 200 OK
 			res.setStatus(200);
-			return user;
+			return publication;
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
@@ -120,50 +134,6 @@ public class MechanicController {
 		}
 	}
 
-	
-
-	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
-	{
-		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
-			return null;
-		}
-		HttpHeaders errorHeaders = new HttpHeaders();
-		List<String> typesAllowed = new ArrayList<String>();
-		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
-			// 401 Unauthorized
-			res.setStatus(401);
-			return null;
-		}
-		List<App_user> allUsers = new ArrayList<App_user>();
-		boolean existe = false;
-		allUsers = app.getAllMecha();
-		for(App_user u : allUsers)
-		{
-			if(u.getAppuser_id().equals(Id))
-			{
-				existe = true;
-				break;
-			}
-		}
-
-		if(existe) {
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
-		}
-	}
-
-	
 
 	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.DELETE})
 	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
@@ -181,23 +151,23 @@ public class MechanicController {
 			res.setStatus(401);
 			return null;
 		}
-		List<App_user> allUsers = new ArrayList<App_user>();
+		List<Publication> publicaciones = new ArrayList<Publication>();
 		boolean existe = false;
-		allUsers = app.getAllMecha();
-		App_user user = null;
-		for(App_user u : allUsers)
+		publicaciones = pub.getAllPublications();
+		Publication publication = null;
+		for(Publication u : publicaciones)
 		{
-			if(u.getAppuser_id().equals(Id))
+			if(u.getPublic_id().equals(Id))
 			{
 				existe = true;
-				user = u;
+				publication = u;
 				break;
 			}
 		}
 
 		if(existe) {
-			user.setDeleted(true);
-			app.updateUser(user);
+			publication.setDeleted(true);
+			pub.UpdatePublication(publication);
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 
 		}
@@ -211,21 +181,58 @@ public class MechanicController {
 
 	}
 
-	@RequestMapping(value = "/mechanics/Deleted", method= {RequestMethod.GET})
-	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
+	@RequestMapping(value = "/publications/{Id}/change-status", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestParam("public_status_id")String public_status_id,@RequestHeader("token") String token)
 	{
-		List<App_user> users = new ArrayList<App_user>();
-		for(App_user u : app.getAllDeleted())
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+		Public_status theStatus = null;
+		for(Public_status status : statusRepo.findAll())
 		{
-			if(u.isDeleted() && u.getUser_type_id().equals("MEC"))
+			if(status.getPublic_status_id().equals(public_status_id))
 			{
-				users.add(u);
+				theStatus = status;
 			}
 		}
-		res.setStatus(200);
-		return users;
-	
-	}	
+		Publication publication;
+		publication = pub.getOnePublication(Id).get();
+
+		if(publication!= null)
+		{
+			if(theStatus != null)
+			{
+				publication.setPublic_status_id(theStatus.getPublic_status_id());
+				pub.UpdatePublication(publication);
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+			}
+			else
+			{
+				errorHeaders.set("error-code", "ERR-AUTH-002");
+				errorHeaders.set("error-desc", "tipo de usuario no existe");
+				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+			}
+
+
+		}
+		else
+		{
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
+		}
+
+	}
 
 		
 }
