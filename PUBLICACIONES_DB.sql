@@ -97,7 +97,7 @@ values
 
 --INSERT TABLA PUBLIC_STATUS
 insert into PUBLIC_STATUS values('PEN','PENDING',to_date ('11-04-2020','DD-MM-YYYY '),to_date ('11-04-2020','DD-MM-YYYY'),0);--pending
-insert into PUBLIC_STATUS values('ACT','ACTIVE',to_date ('11-04-2020','DD-MOMMN-YYYY '),to_date ('11-04-2020','DD-MM-YYYY'),0);--active
+insert into PUBLIC_STATUS values('ACT','ACTIVE',to_date ('11-04-2020','DD-MM-YYYY '),to_date ('11-04-2020','DD-MM-YYYY'),0);--active
 insert into PUBLIC_STATUS values('DEB','DEBT',to_date ('11-04-2020','DD-MM-YYYY '),to_date ('11-04-2020','DD-MM-YYYY'),0);--debt(MOROSA)
 insert into PUBLIC_STATUS values('INA','INACTIVE',to_date ('11-04-2020','DD-MM-YYYY '),to_date ('11-04-2020','DD-MM-YYYY'),0);--unactive
 
