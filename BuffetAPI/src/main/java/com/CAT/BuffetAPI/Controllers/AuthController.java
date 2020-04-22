@@ -1,11 +1,5 @@
 package com.CAT.BuffetAPI.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -14,13 +8,6 @@ import java.util.UUID;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Entities.Verificationtoken;
@@ -29,6 +16,20 @@ import com.CAT.BuffetAPI.Repositories.VerificationTokenRepository;
 import com.CAT.BuffetAPI.Services.App_UserService;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.CAT.BuffetAPI.Services.EmailSenderService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -106,18 +107,28 @@ public class AuthController {
 
 	}
 
-
 	@PostMapping("/register")
-	public void Register(@RequestBody App_user user , HttpServletResponse resp) {
+	public String Register(@RequestBody App_user user , HttpServletResponse resp) {
+		// Valida si existe el mail y username del nuevo APP_USER
 		if(auth.RegisterValidation(user)) {
-			user.setMailconfirmed(0);
+			// Setea datos generales
+			user.setMail_confirmed(false);
 			user.setUpdated_at(new Date());
 			user.setCreated_at(new Date());
-			app.addUser(user);
-			resp.setStatus(200);  
-			Verificationtoken verificationToken = new Verificationtoken(UUID.randomUUID().toString(),user.getAppuser_id());
+			// Agrega al Usuario a la BD. 
+			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
+			user = app.addUser(user);
+
+			// !BUG: Si hay cualquier atado insertando el VerificationToken a la BD, devuelve status 500 pero se crea el Ususario
+			// Crea UUID sacando los guiones para cumplir requisitos de BD
+			String tokenId = UUID.randomUUID().toString().replace("-", "");
+			// Crea un nuevo VerificationToken con el token y el id del usuario
+			Verificationtoken verificationToken = new Verificationtoken(tokenId, user.getAppuser_id());
+			// Lo guarda en la BD
 			verificationRepo.save(verificationToken);
 
+			// Envia un mail al nuevo usuario con el token de verificación
+			// TODO Que mande a Initial-D para que muestre un mensaje boni o algo
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 			mailMessage.setTo(user.getEmail());
 			mailMessage.setSubject("Complete Registration!");
@@ -127,11 +138,15 @@ public class AuthController {
 
 			mailSender.sendEmail(mailMessage);
 
+			// Status 200 y retorna el Id del APP_USER nuevo
+			resp.setStatus(200);
+			return user.getAppuser_id();
 		}
 		else
 		{
-			resp.setStatus(403);
-
+			// 409 Conflict
+			resp.setStatus(409);
+			return "Nombre de Usuario o Mail ya existe";
 		}
 	}
 
@@ -146,7 +161,7 @@ public class AuthController {
 			aux = Userrepo.findById(token.getApp_userid());
 			App_user user;
 			user = aux.get();
-			user.setMailconfirmed(1);
+			user.setMail_confirmed(true);
 			app.updateUser(user);
 			verificationRepo.deleteById(token.getToken());
 			modelAndView.setViewName("accountVerified");
