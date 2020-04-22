@@ -73,7 +73,7 @@ insert into PUBLICATION  --publicacion 2
 values
     (SYS_GUID(),--public_id
     '7CD5B7769DF85CEFE034080020825436',--mecha_id
-    'VEN',--user_type_id
+    'MEC',--user_type_id
     'ACT',--public_status_id
     to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
     to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
