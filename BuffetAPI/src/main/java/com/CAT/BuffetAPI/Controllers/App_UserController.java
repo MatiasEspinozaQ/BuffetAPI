@@ -69,6 +69,10 @@ public class App_UserController {
 				return null;
 			}
 
+			for (App_user app_user : userList) {
+				app_user.setHash("");
+			}
+
 			// 200 OK
 			res.setStatus(200);
 			return userList;
@@ -154,7 +158,7 @@ public class App_UserController {
 
 
 	@RequestMapping("/user-status")
-	private List<User_status> getAllStatys(HttpServletResponse res){
+	private List<User_status> getAllStatus(HttpServletResponse res){
 
 		try {
 			// Get the all the Users
@@ -219,7 +223,7 @@ public class App_UserController {
 
 
 	@RequestMapping(value = "/users/{Id}/change-type", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
+	private ResponseEntity<JsonObject> ChangeType(HttpServletResponse res, @PathVariable String Id ,@RequestParam("user_type")String userType,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -271,16 +275,16 @@ public class App_UserController {
 
 	}
 
-
-	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.DELETE})
-	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	
+	@RequestMapping(value = "/users/{Id}/change-status", method = {RequestMethod.POST})
+	private String ChangeStatus(HttpServletResponse res, @PathVariable String Id ,@RequestParam("status")String status,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
+
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
@@ -288,34 +292,130 @@ public class App_UserController {
 			res.setStatus(401);
 			return null;
 		}
-		List<App_user> allUsers = new ArrayList<App_user>();
-		boolean existe = false;
-		allUsers = app.getAllUsers();
-		App_user user = null;
-		for(App_user u : allUsers)
-		{
-			if(u.getAppuser_id().equals(Id))
-			{
-				existe = true;
-				user = u;
-				break;
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
 			}
+
+			App_user updateUser = user.get();
+			
+			updateUser.setStatus_id(status);
+			app.updateUser(updateUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Status actualizado exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
+
+	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.DELETE})
+	private String DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
 		}
 
-		if(existe) {
-			user.setDeleted(true);
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
 		}
 
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
 
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			App_user delUser = user.get();
+			
+			delUser.setDeleted(true);
+			app.updateUser(delUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Usuario Eliminado Exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
+	@RequestMapping(value= "/users/{Id}/restore", method = {RequestMethod.PUT})
+	private String RestoreUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			App_user resUser = user.get();
+
+			if(!resUser.isDeleted()){
+				// 409 Conflict
+				res.setStatus(409);
+				return "El Usuario no está Eliminado";
+			}
+			
+			resUser.setDeleted(false);
+			app.updateUser(resUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Usuario Restaurado Exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
 	}
 
 	@RequestMapping(value = "/users/{Id}/ban", method = {RequestMethod.POST})
@@ -395,11 +495,18 @@ public class App_UserController {
 
 
 
+	// TODO SEGURIDAD Y STATUS CODES
 	@RequestMapping(value = "/users/deleted", method= {RequestMethod.GET})
 	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
 	{
+		List<App_user> delList = app.getAllDeleted();
+
+		for (App_user user : delList) {
+			user.setHash("");
+		}
+		
 		res.setStatus(200);
-		return app.getAllDeleted();
+		return delList;
 	}	
 
 

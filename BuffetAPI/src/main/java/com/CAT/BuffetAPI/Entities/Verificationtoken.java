@@ -23,7 +23,7 @@ public class Verificationtoken {
 		Appuser_id = app_userid;
 	}
 
-	private Date expiryDate;
+	private Date expiry_date;
     
     public Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar cal = Calendar.getInstance();
@@ -36,7 +36,7 @@ public class Verificationtoken {
 	public Verificationtoken(String token, String appuser_id) {
 		super();
 		this.token = token;
-		this.expiryDate = calculateExpiryDate(EXPIRATION);
+		this.expiry_date = calculateExpiryDate(EXPIRATION);
 		this.Appuser_id = appuser_id;
 	}
 
@@ -54,11 +54,11 @@ public class Verificationtoken {
 	}
 
 
-	public Date getExpiryDate() {
-		return expiryDate;
+	public Date getExpiry_Date() {
+		return expiry_date;
 	}
 
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
+	public void setExpiry_Date(Date expiry_date) {
+		this.expiry_date = expiry_date;
 	}
 }

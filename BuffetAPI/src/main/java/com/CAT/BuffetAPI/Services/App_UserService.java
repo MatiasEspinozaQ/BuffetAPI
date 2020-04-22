@@ -37,7 +37,6 @@ public class App_UserService {
 
 		//Se revisan todos los usuarios y se añaden aquellos donde isDelete tiene valor negativo
 		app_UserRepository.findAll().forEach( p ->{
-			p.setHash(""); // Deja el hash vacio por seguridad
 			if(!p.isDeleted()) {
 				listaUsuarios.add(p);
 			}
@@ -53,7 +52,6 @@ public class App_UserService {
 		//Se revisan todos los usuarios y se añaden aquellos donde isDelete tiene valor negativo
 		app_UserRepository.findAll().forEach(
 				p ->{
-					p.setHash(""); // Deja el hash vacio por seguridad
 					if(p.isDeleted()) {
 						listaUsuarios.add(p);
 					}
@@ -68,7 +66,6 @@ public class App_UserService {
 		app_UserRepository.findAll().forEach(u ->{
 			if( u.getUser_type_id().equals("MEC") && !u.isDeleted())
 			{	
-				u.setHash(""); // Deja el hash vacio por seguridad
 				meca.add(u);
 			}
 		}
@@ -86,7 +83,6 @@ public class App_UserService {
 		return app_UserRepository.getByUsername(username);
 	}
 
-
 	//retorna un usuario en especifico, sino retorna excepcion.
 	public Optional<App_user> getAppUser(String id)
 	{
@@ -94,8 +90,8 @@ public class App_UserService {
 	}
 
 	//añade un usuario
-	public void addUser(App_user user) {
-		app_UserRepository.save(user);
+	public App_user addUser(App_user user) {
+		return app_UserRepository.save(user);
 	}
 
 	//similar al metodo anterior pero esta separado para hacer mas simple futuros cambios.

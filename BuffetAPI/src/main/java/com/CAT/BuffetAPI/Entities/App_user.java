@@ -32,7 +32,7 @@ public class App_user {
 	private String adress;
 	private String phone;
 	private Date birthday;
-	private int mail_confirmed;
+	private boolean mail_confirmed;
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date lastlogin;
@@ -131,11 +131,11 @@ public class App_user {
 		this.deleted = deleted;
 	}
 
-	public int getMailconfirmed() {
+	public boolean getMail_confirmed() {
 		return mail_confirmed;
 	}
-	public void setMailconfirmed(int mailconfirmed) {
-		this.mail_confirmed = mailconfirmed;
+	public void setMail_confirmed(boolean mail_confirmed) {
+		this.mail_confirmed = mail_confirmed;
 	}
 	public Date getBirthday() {
 		return birthday;
