@@ -3,6 +3,7 @@ package com.CAT.BuffetAPI.Controllers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,10 @@ public class App_UserController {
 
 
 	@RequestMapping("/users")
-	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token)
+	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token, @RequestParam (required = false) String username,
+																									  @RequestParam (required = false) String email,
+			                                                                                          @RequestParam (required = false) String user_type_id,
+			                                                                                          @RequestParam (required = false) String status_id)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -61,8 +65,26 @@ public class App_UserController {
 
 		try {
 			// Get the all the Users
-			List<App_user> userList = app.getAllUsers();
-
+			HashMap<String,Object> data = new HashMap<>();
+			
+			if(username!= null)
+			{
+				data.put("username", username);
+			}
+			if(email!=null)
+			{
+				data.put("email", email);
+			}if(user_type_id!= null)
+			{
+				data.put("user_type_id", user_type_id);
+			}
+			if(status_id!=null)
+			{
+				data.put("status_id", status_id);
+			}
+			System.out.println("preAsignacion");
+			List<App_user> userList = app.getData(data);
+			System.out.println("postAsignacion");
 			if(userList == null){
 				// 404 Not Found
 				res.setStatus(404);
@@ -75,11 +97,13 @@ public class App_UserController {
 
 			// 200 OK
 			res.setStatus(200);
-			return userList;
+			return app.getData(data);
+			//return userList;
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
+			System.out.println(e);
 			res.setStatus(500);
 			return null;
 		}

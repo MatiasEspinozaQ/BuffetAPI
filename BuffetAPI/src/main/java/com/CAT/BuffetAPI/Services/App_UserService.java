@@ -1,6 +1,7 @@
 package com.CAT.BuffetAPI.Services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,6 +135,11 @@ public class App_UserService {
 				}
 				);
 		return statusList;
+	}
+
+	public List<App_user> getData(HashMap<String, Object> data) {
+		
+		return app_UserRepository.getData(data);
 	}
 
 }
