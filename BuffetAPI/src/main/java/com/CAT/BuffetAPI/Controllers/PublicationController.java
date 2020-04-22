@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Entities.Public_status;
 import com.CAT.BuffetAPI.Entities.Publication;
+import com.CAT.BuffetAPI.Entities.User_status;
 import com.CAT.BuffetAPI.Entities.User_type;
 import com.CAT.BuffetAPI.Repositories.Public_statusRepository;
 import com.CAT.BuffetAPI.Repositories.PublicationRepository;
@@ -37,14 +39,14 @@ public class PublicationController {
 	private PublicationRepository pubrepo;
 	@Autowired
 	private Public_statusRepository statusRepo;
-	
+
 	@Autowired
 	private AuthService auth;
 
 	@RequestMapping("/publications")
 	private List<Publication> getAllPublications(HttpServletResponse res, @RequestHeader("token") String token,
-												@RequestParam(required = false) String region
-												,@RequestParam(required = false) String public_status_id)
+			@RequestParam(required = false) String region
+			,@RequestParam(required = false) String public_status_id)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -63,7 +65,7 @@ public class PublicationController {
 		try {
 			// Get the all the Users
 			HashMap<String,Object> data = new HashMap<>();
-			
+
 			if(region!= null)
 			{
 				data.put("region", region);
@@ -72,7 +74,7 @@ public class PublicationController {
 			{
 				data.put("public_status_id", public_status_id);
 			}
-			
+
 			if(pubrepo.getData(data).isEmpty()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -135,7 +137,7 @@ public class PublicationController {
 	}
 
 
-	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.DELETE})
+	@RequestMapping(value= "/publications/{Id}", method = {RequestMethod.DELETE})
 	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
@@ -234,5 +236,76 @@ public class PublicationController {
 
 	}
 
-		
+	@RequestMapping("/public-status")
+	private List<Public_status> getAllStatus(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<Public_status> status = statusRepo.findAll();
+
+			if(status == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return status;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
+	@RequestMapping(value= "/publications/{Id}", method = {RequestMethod.POST})
+	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody Publication publication,@RequestHeader("token") String token)
+	{
+
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		HttpHeaders errorHeaders = new HttpHeaders();
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+
+			res.setStatus(401);
+			return null;
+		}
+		List<Publication> allUsers = new ArrayList<Publication>();
+		boolean existe = false;
+		allUsers = pub.getAllPublications();
+		for(Publication u : allUsers)
+		{
+			if(u.getPublic_id().equals(Id))
+			{
+				existe = true;
+				break;
+			}
+		}
+
+		if(existe) {
+
+			pub.UpdatePublication(publication);
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
+
+		}
+		else
+		{
+
+			errorHeaders.set("error-code", "ERR-AUTH-001");
+			errorHeaders.set("error-desc", "Usuario no existe");
+			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
+		}
+	}
+
+
+
 }

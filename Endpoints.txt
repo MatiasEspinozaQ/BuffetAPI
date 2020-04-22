@@ -69,7 +69,7 @@ http://localhost:8888/user-adm/users/Deleted
 igual que arriba pero la url se ve asi /mech-adm/mecanicos/{id}/change-status
 
 /* ----------------------------------------------------------------------------------------------- */
-/* -------------------------------- Administracion de Usuarios -------------------------------- */
+/* -------------------------------- Administracion de Publicaciones-------------------------------- */
 /* ----------------------------------------------------------------------------------------------- */
 http://localhost:8888/pub-adm/publications GET
 	Recibe: token, filtros por composicion "region" y "public_status_id"
@@ -77,9 +77,16 @@ http://localhost:8888/pub-adm/publications GET
 http://localhost:8888/pub-adm/publications/{Id} GET
 	Recibe: token
 	Retorna: Publicacion con el id escrito en la Url
+http://localhost:8888/pub-adm/publications/{Id} POST
+	Recibe: token, una publicacion entera
+	Retorna: Publicacion con el id escrito en la Url
 http://localhost:8888/pub-adm/publications/{Id} DELETE
 	Recibe: token
 	Retorna: 200(OK) o 401(Unauthorized)
 http://localhost:8888/pub-adm/publications/{Id}/change-status POST
 	Recibe: token, json con parametro "public_status_id"
 	Retorna: 200(OK) o 401(Unauthorized)
+
+http://localhost:8888/pub-adm/public-status
+	recibe: nada
+	Retorna: json con todos los status de publicacion.
