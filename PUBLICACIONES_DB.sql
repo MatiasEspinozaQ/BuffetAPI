@@ -32,9 +32,13 @@ CREATE TABLE PUBLIC_STATUS(
     update_at               DATE,
     deleted                 NUMERIC(1)
 );
+--CONSTRAINT
+ALTER TABLE PUBLICATION ADD CONSTRAINT appuser_id_fk FOREIGN KEY(appuser_id) REFERENCES APP_USER(appuser_id);
+ALTER TABLE PUBLICATION ADD CONSTRAINT user_type_id_fk FOREIGN KEY(user_type_id) REFERENCES USER_TYPE(user_type_id);
 
+--INSERT TABLA PUBLICATION
 insert into PUBLICATION --publicacion 1
-(public_id,appuser_id,user_type_id,public_status_id,create_at,update_at,deleted,title,public_desc,schedule,services,bussiness_name,adress,comuna,region,landline,mobile_number,email,views)
+(public_id,appuser_id,user_type_id,public_status_id,created_at,update_at,deleted,title,public_desc,schedule,services,bussiness_name,address,comuna,region,landline,mobile_number,email,views)
 values
     (SYS_GUID(),--public_id
     '7CD5B7769DF75CEFE034080020825436',--mecha_id
@@ -58,7 +62,7 @@ values
     5--views
 );
 insert into PUBLICATION  --publicacion 2
-(public_id,appuser_id,user_type_id,public_status_id,create_at,update_at,deleted,title,public_desc,schedule,services,bussiness_name,adress,comuna,region,landline,mobile_number,email,views)
+(public_id,appuser_id,user_type_id,public_status_id,created_at,update_at,deleted,title,public_desc,schedule,services,bussiness_name,address,comuna,region,landline,mobile_number,email,views)
 values
     (SYS_GUID(),--public_id
     '7CD5B7769DF85CEFE034080020825436',--mecha_id
@@ -84,13 +88,13 @@ values
     65--views
 );
 
+--INSERT TABLA PUBLIC_STATUS
 insert into PUBLIC_STATUS values('PEN','PENDING',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--pending
 insert into PUBLIC_STATUS values('ACT','ACTIVE',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--active
 insert into PUBLIC_STATUS values('DEB','DEBT',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--debt(MOROSA)
 insert into PUBLIC_STATUS values('INA','INACTIVE',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--unactive
 
-ALTER TABLE PUBLICATION ADD CONSTRAINT appuser_id_fk FOREIGN KEY(appuser_id) REFERENCES APP_USER(appuser_id);--TIENE UN ERROR SI SE INGRESA EL ID DEL USUARIO POR SYS_GUID, TIENEN QUE AGREGAR EL ID DE EL USUARIO QUE TENGAN REGISTRADO COMO MECANICO
-ALTER TABLE PUBLICATION ADD CONSTRAINT user_type_id_fk FOREIGN KEY(user_type_id) REFERENCES USER_TYPE(user_type_id);
+
 
 --VERIFICACION DE USER_TYPE MECANICO
 alter table PUBLICATION
