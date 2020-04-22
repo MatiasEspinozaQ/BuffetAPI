@@ -44,8 +44,8 @@ values
     '7CD5B7769DF75CEFE034080020825436',--mecha_id
     'MEC',--user_type_id
     'ACT',--public_status_id
-    to_date ('13-abril-2020 10:00 AM','DD-MON-YYYY HH:MI AM'),--create_at
-    to_date ('13-abril-2020 10:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
+    to_date ('13-04-2020 10:00 AM','DD-MON-YYYY HH:MI AM'),--create_at
+    to_date ('13-04-2020 10:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Automotriz J.D.C Suzuki',--title
     'Servicio Suzuki.Chevrolet,Mazda, Mantenciones de kilometraje y desabolladura.Personal especializado en las marcas.Garantía por trabajos realizados.20 años de experiencia en el rubro.',--public_desc
@@ -61,6 +61,7 @@ values
     'jdc.contacto@gmail.com',--email
     5--views
 );
+
 insert into PUBLICATION  --publicacion 2
 (public_id,appuser_id,user_type_id,public_status_id,created_at,update_at,deleted,title,public_desc,schedule,services,bussiness_name,address,comuna,region,landline,mobile_number,email,views)
 values
@@ -68,8 +69,8 @@ values
     '7CD5B7769DF85CEFE034080020825436',--mecha_id
     'VEN',--user_type_id
     'ACT',--public_status_id
-    to_date ('05-abril-2020 11:00 AM','DD-MON-YYYY HH:MI AM'),--create_at
-    to_date ('05-abril-2020 11:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
+    to_date ('05-04-2020 11:00 AM','DD-MON-YYYY HH:MI AM'),--create_at
+    to_date ('05-04-2020 11:00 AM','DD-MON-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Kaiser Lubricentro',--title
     'Kaiser Lubricentro un taller automotriz dedicado a dar servicios de lubricación en general tanto para vehículos bencineros como diesel. cambiamos el aceite de motor, caja de cambio, mecánica o automática, diferenciales, cajas de transparencias, dirección, hidráulica, etc.',--public_desc
@@ -93,8 +94,6 @@ insert into PUBLIC_STATUS values('PEN','PENDING',to_date ('11-abril-2020','DD-MO
 insert into PUBLIC_STATUS values('ACT','ACTIVE',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--active
 insert into PUBLIC_STATUS values('DEB','DEBT',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--debt(MOROSA)
 insert into PUBLIC_STATUS values('INA','INACTIVE',to_date ('11-abril-2020','DD-MON-YYYY '),to_date ('11-abril-2020','DD-MON-YYYY'),0);--unactive
-
-
 
 --VERIFICACION DE USER_TYPE MECANICO
 alter table PUBLICATION
