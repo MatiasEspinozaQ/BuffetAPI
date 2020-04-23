@@ -179,7 +179,7 @@ public class AuthController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value="/Recover-pass", method= {RequestMethod.GET, RequestMethod.POST},consumes = "application/x-www-form-urlencoded")
+	@RequestMapping(value="/Recover-pass", method= {RequestMethod.GET, RequestMethod.POST})
 	public void Recuperacion(@RequestParam("email") String email, HttpServletResponse resp)
 	{
 		if(auth.RecoverPassword(email)) {
@@ -190,12 +190,6 @@ public class AuthController {
 			resp.setStatus(404);
 		}
 
-	}
-
-	private void log(String msg){
-		System.out.println ("----------------------------------------------------------------");
-		System.out.println (msg);
-		System.out.println ("----------------------------------------------------------------");
 	}
 
 	// TODO Agregar todos los tipos de usuario como permitidos
@@ -235,7 +229,7 @@ public class AuthController {
 			
 			// Se asegura que la contraseña antigua calza con la del usuario
 			String oldPsw = passwords.get("old_psw");
-			if(updateUser.getHash().equals(oldPsw)){
+			if(!updateUser.getHash().equals(oldPsw)){
 				// 409 Conflict
 				res.setStatus(409);
 				return null;
