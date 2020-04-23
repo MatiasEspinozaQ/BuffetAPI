@@ -1,6 +1,7 @@
 package com.CAT.BuffetAPI.Controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +40,10 @@ public class MechanicController {
 	private userTypeRepository type;
 	
 	@RequestMapping("/mechanics")
-	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token)
+	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token,
+													@RequestParam (required = false) String username,
+													@RequestParam (required = false) String email,
+													@RequestParam (required = false) String status_id)
 	{
 	
 		if(token.isEmpty()){
@@ -57,26 +61,48 @@ public class MechanicController {
 		}
 
 		try {
-			// Get the all the Users
-			List<App_user> userList = app.getAllMecha();
-			
-			
-			if(userList.isEmpty()){
-				// 404 Not Found
-				res.setStatus(404);
-				return null;
-			}
 
-			// 200 OK
-			res.setStatus(200);
-			return userList;
+				// Get the all the Users
+				HashMap<String,Object> data = new HashMap<>();
+				
+				if(username!= null)
+				{
+					data.put("username", username);
+				}
+				if(email!=null)
+				{
+					data.put("email", email);
+				}
+				if(status_id!=null)
+				{
+					data.put("status_id", status_id);
+				}
+				System.out.println("preAsignacion");
+				List<App_user> userList = app.getData(data);
+				System.out.println("postAsignacion");
+				if(userList == null){
+					// 404 Not Found
+					res.setStatus(404);
+					return null;
+				}
+				List<App_user> onlyMec = new ArrayList<App_user>();
+				for (App_user app_user : userList) {
+					app_user.setHash("");
+					if(app_user.getUser_type_id().equals("MEC"))
+						onlyMec.add(app_user);
+				}
 
+				// 200 OK
+				res.setStatus(200);
+				return onlyMec;
+			
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
 			res.setStatus(500);
 			return null;
 		}
+	
 	}
 
 

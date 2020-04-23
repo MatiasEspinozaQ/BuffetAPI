@@ -46,7 +46,9 @@ public class PublicationController {
 	@RequestMapping("/publications")
 	private List<Publication> getAllPublications(HttpServletResponse res, @RequestHeader("token") String token,
 			@RequestParam(required = false) String region
-			,@RequestParam(required = false) String public_status_id)
+			,@RequestParam(required = false) String public_status_id
+			,@RequestParam(required = false) String bussiness_name
+			,@RequestParam(required = false) String title)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -74,12 +76,21 @@ public class PublicationController {
 			{
 				data.put("public_status_id", public_status_id);
 			}
+			if(title != null)
+			{
+				data.put("title",title);
+			}
+			if(bussiness_name != null)
+			{
+				data.put("bussiness_name",bussiness_name);
+			}
 
 			if(pubrepo.getData(data).isEmpty()){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;
 			}
+			
 
 			// 200 OK
 			res.setStatus(200);
