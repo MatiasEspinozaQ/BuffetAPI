@@ -97,7 +97,7 @@ public class App_UserController {
 
 			// 200 OK
 			res.setStatus(200);
-			return app.getData(data);
+			return userList;
 			//return userList;
 
 		} catch (Exception e) {

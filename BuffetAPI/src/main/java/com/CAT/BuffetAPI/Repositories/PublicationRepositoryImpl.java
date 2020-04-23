@@ -37,6 +37,12 @@ public class PublicationRepositoryImpl {
 				case "public_status_id":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
+				case "title":
+					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
+					break;
+				case "bussiness_name":
+					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
+					break;
 				
 			}
 			
