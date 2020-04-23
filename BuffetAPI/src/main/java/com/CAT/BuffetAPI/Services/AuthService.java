@@ -1,24 +1,16 @@
 package com.CAT.BuffetAPI.Services;
 
-
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Repositories.App_UserRepository;
@@ -52,6 +44,13 @@ public class AuthService {
 				.setSigningKey(DatatypeConverter.parseBase64Binary(SecretKey))
 				.parseClaimsJws(jwt).getBody();
 		return claims;
+	}
+
+	public String extractId(String token){
+		Claims claims = getClaims(token);
+		String id = claims.get("userId", String.class);
+
+		return id;
 	}
 
 	public boolean Authorize(String token,List<String> typesAllowed)

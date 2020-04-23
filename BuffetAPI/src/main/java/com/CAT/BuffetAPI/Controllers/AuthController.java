@@ -1,7 +1,10 @@
 package com.CAT.BuffetAPI.Controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -186,6 +190,72 @@ public class AuthController {
 			resp.setStatus(404);
 		}
 
+	}
+
+	private void log(String msg){
+		System.out.println ("----------------------------------------------------------------");
+		System.out.println (msg);
+		System.out.println ("----------------------------------------------------------------");
+	}
+
+	// TODO Agregar todos los tipos de usuario como permitidos
+	// TODO Recibir contraseña antigua también y comprobar que calce
+	@RequestMapping(value = "/change-password", method = {RequestMethod.POST})
+	private String ChangePassword(HttpServletResponse res, @RequestBody Map<String, String> passwords,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+
+		try {
+			// Get the Id from the Token
+			String Id = auth.extractId(token);
+
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			App_user updateUser = user.get();
+			
+			// Se asegura que la contraseña antigua calza con la del usuario
+			String oldPsw = passwords.get("old_psw");
+			if(updateUser.getHash().equals(oldPsw)){
+				// 409 Conflict
+				res.setStatus(409);
+				return null;
+			}
+
+			// Cambia la contraseña
+			String psw = passwords.get("psw");
+			updateUser.setHash(psw);
+			app.updateUser(updateUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Contraseña cambiada exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
 	}
 
 }
