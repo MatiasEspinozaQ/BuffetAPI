@@ -48,7 +48,8 @@ public class PublicationController {
 			@RequestParam(required = false) String region
 			,@RequestParam(required = false) String public_status_id
 			,@RequestParam(required = false) String bussiness_name
-			,@RequestParam(required = false) String title)
+			,@RequestParam(required = false) String title
+			,@RequestParam(required = false) String deleted)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -84,6 +85,15 @@ public class PublicationController {
 			{
 				data.put("bussiness_name",bussiness_name);
 			}
+			if(deleted != null)
+			{
+				data.put("deleted",deleted);
+			}
+			else
+			{
+				data.put("deleted",0);
+			}
+
 
 			if(pubrepo.getData(data).isEmpty()){
 				// 404 Not Found
@@ -213,7 +223,7 @@ public class PublicationController {
 		Public_status theStatus = null;
 		for(Public_status status : statusRepo.findAll())
 		{
-			if(status.getPublic_status_id().equals(public_status_id))
+			if(status.getStatus_id().equals(public_status_id))
 			{
 				theStatus = status;
 			}
@@ -225,7 +235,7 @@ public class PublicationController {
 		{
 			if(theStatus != null)
 			{
-				publication.setPublic_status_id(theStatus.getPublic_status_id());
+				publication.setPublic_status_id(theStatus.getStatus_id());
 				pub.UpdatePublication(publication);
 				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 			}

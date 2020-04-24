@@ -36,14 +36,14 @@ public class MechanicController {
 	@Autowired
 	private AuthService auth;
 	
-	@Autowired
-	private userTypeRepository type;
+
 	
 	@RequestMapping("/mechanics")
 	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token,
 													@RequestParam (required = false) String username,
 													@RequestParam (required = false) String email,
-													@RequestParam (required = false) String status_id)
+													@RequestParam (required = false) String status_id,
+													@RequestParam (required = false) String deleted)
 	{
 	
 		if(token.isEmpty()){
@@ -77,6 +77,15 @@ public class MechanicController {
 				{
 					data.put("status_id", status_id);
 				}
+				if(deleted != null)
+				{
+					data.put("deleted", deleted);
+				}
+				else
+				{
+					data.put("deleted", false);
+				}
+				
 				System.out.println("preAsignacion");
 				List<App_user> userList = app.getData(data);
 				System.out.println("postAsignacion");
@@ -334,21 +343,6 @@ public class MechanicController {
 
 	}
 
-	@RequestMapping(value = "/mechanics/Deleted", method= {RequestMethod.GET})
-	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
-	{
-		List<App_user> users = new ArrayList<App_user>();
-		for(App_user u : app.getAllDeleted())
-		{
-			if(u.isDeleted() && u.getUser_type_id().equals("MEC"))
-			{
-				users.add(u);
-			}
-		}
-		res.setStatus(200);
-		return users;
-	
-	}	
 
 		
 }

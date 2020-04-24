@@ -47,7 +47,8 @@ public class App_UserController {
 	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token, @RequestParam (required = false) String username,
 																									  @RequestParam (required = false) String email,
 			                                                                                          @RequestParam (required = false) String user_type_id,
-			                                                                                          @RequestParam (required = false) String status_id)
+			                                                                                          @RequestParam (required = false) String status_id,
+			                                                                                          @RequestParam (required = false) String deleted)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -82,6 +83,15 @@ public class App_UserController {
 			{
 				data.put("status_id", status_id);
 			}
+			if(deleted != null)
+			{
+				data.put("deleted", deleted);
+			}
+			else
+			{
+				data.put("deleted", false);
+			}
+			
 			System.out.println("preAsignacion");
 			List<App_user> userList = app.getData(data);
 			System.out.println("postAsignacion");
@@ -517,21 +527,6 @@ public class App_UserController {
 
 	}
 
-
-
-	// TODO SEGURIDAD Y STATUS CODES
-	@RequestMapping(value = "/users/deleted", method= {RequestMethod.GET})
-	private List<App_user> GetAllDeletedUsers(HttpServletResponse res)
-	{
-		List<App_user> delList = app.getAllDeleted();
-
-		for (App_user user : delList) {
-			user.setHash("");
-		}
-		
-		res.setStatus(200);
-		return delList;
-	}	
 
 
 }

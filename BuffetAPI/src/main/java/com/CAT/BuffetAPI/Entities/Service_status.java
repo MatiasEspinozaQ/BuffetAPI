@@ -6,13 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Public_status {
+public class Service_status {
 	@Id
-	public String status_id;
-	public String status;
-	public Date create_at;
-	public Date update_at;
-	public boolean deleted;
+	private String status_id;
+	private String status;
+	private Date create_at;
+	private Date update_at;
+	private boolean deleted;
 	public String getStatus_id() {
 		return status_id;
 	}
@@ -43,7 +43,6 @@ public class Public_status {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
 
+	
 }

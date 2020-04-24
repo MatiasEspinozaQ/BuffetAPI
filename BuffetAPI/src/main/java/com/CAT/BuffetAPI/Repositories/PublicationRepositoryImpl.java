@@ -43,6 +43,17 @@ public class PublicationRepositoryImpl {
 				case "bussiness_name":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
+				case "deleted":
+					if(value.equals("true"))
+					{
+					System.out.println("añadido deleted");
+					predicates.add(cb.equal(root.get("deleted"), 1));
+					break;
+					}
+					else
+					{
+						predicates.add(cb.equal(root.get("deleted"),0));
+					}
 				
 			}
 			

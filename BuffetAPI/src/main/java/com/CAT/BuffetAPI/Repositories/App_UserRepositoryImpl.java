@@ -47,12 +47,24 @@ public class App_UserRepositoryImpl {
 					System.out.println("añadido status");
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
+				case "deleted":
+					if(value.equals("true"))
+					{
+					System.out.println("añadido deleted");
+					predicates.add(cb.equal(root.get("deleted"), 1));
+					break;
+					}
+					else
+					{
+						predicates.add(cb.equal(root.get("deleted"), 0));
+					}
+				
 				
 			}
 			
 		});
-		predicates.add(cb.equal(root.get("deleted"), 0)); //no usuarios eliminados
-		System.out.println("añadido no deleteados");
+		 //no usuarios eliminados
+		
 		query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 		System.out.println("Query Lista");
 		return em.createQuery(query).getResultList(); 		
