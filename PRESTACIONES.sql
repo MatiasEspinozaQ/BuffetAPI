@@ -129,28 +129,12 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 insert into PRODUCT_STATUS values('ACT','ACTIVE',to_date ('21-04-2020','DD-MM-YYYY '),to_date ('21-04-2020','DD-MM-YYYY'),0);--active
 insert into PRODUCT_STATUS values('INA','INACTIVE',to_date ('21-04-2020','DD-MM-YYYY '),to_date ('21-04-2020','DD-MM-YYYY'),0);--unactive
 
---insert tabla PRODUCT
-INSERT INTO PRODUCT (product_id,name,product_desc,stock,brand,unit_id,product_status,create_at,update_at,deleted)
-VALUES(
-SYS_GUID(),--product_id	        
-'Aceite de motor CASTROL EDGE',--name                
-'Castrol EDGE es un aceite para motor totalmente sintético desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
-15,--stock               
-'CASTROL EDGE',--brand               
-'L',--unit_id             
-'ACT',--product_status      
-to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at           
-to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
-0--deleted 
-);
-
-----------------------------:3----------------------------
 --insert tabla UNIT
 INSERT INTO UNIT (abbreviation, name, plural_name,create_at,update_at,deleted) 
 VALUES(
 'L',--abbreviation
 'Litro',--name
-'Litros'--plural_name
+'Litros',--plural_name
 to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
 to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 0--deleted
@@ -170,9 +154,23 @@ INSERT INTO UNIT (abbreviation, name, plural_name,create_at,update_at,deleted)
 VALUES(
 'K',--abbreviation
 'Kilo',--name
-'Kilos'--plural_name
+'Kilos',--plural_name
 to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
 to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 0--deleted
 );
 
+--insert tabla PRODUCT
+INSERT INTO PRODUCT (product_id,name,product_desc,stock,brand,unit_id,product_status,create_at,update_at,deleted)
+VALUES(
+SYS_GUID(),--product_id	        
+'Aceite de motor CASTROL EDGE',--name                
+'Castrol EDGE es un aceite para motor totalmente sintético desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
+15,--stock               
+'CASTROL EDGE',--brand               
+'L',--unit_id             
+'ACT',--product_status      
+to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at           
+to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
+0--deleted 
+);
