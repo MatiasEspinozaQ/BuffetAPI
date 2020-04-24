@@ -115,10 +115,10 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,create_at,update_at,deleted) 
 VALUES('09F68676182ACF8AE040578CB20B7491',--serv_id
-'Correas Accesorio',--serv_name
-40000,--serv_price
-'Utilizamos las mejores marcas para el cambio de correas y accesorios de su vehículo',--serv_desc
-00.28,--estimated_time
+'Cambio de neumáticos',--serv_name
+30000,--serv_price
+'Utilizamos las mejores marcas en neumáticos para cambiarselos a tu coche',--serv_desc
+02.00,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
@@ -172,5 +172,20 @@ SYS_GUID(),--product_id
 'ACT',--product_status      
 to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at           
 to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
+0--deleted 
+);
+
+
+INSERT INTO PRODUCT (product_id,name,product_desc,stock,brand,unit_id,product_status,create_at,update_at,deleted)
+VALUES(
+SYS_GUID(),--product_id	        
+'Neumáticos TURANZA ER33',--name                
+'A los coches de lujo les vendrá como anillo al dedo el Bridgestone ER33, un neumático creado especialmente para este tipo de automóviles gracias a su alto rendimiento.',--product_desc        
+20,--stock               
+'BRIDGESTONE',--brand               
+'U',--unit_id             
+'ACT',--product_status      
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at           
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
 0--deleted 
 );
