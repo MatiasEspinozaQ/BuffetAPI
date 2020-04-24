@@ -36,7 +36,7 @@ name                VARCHAR(120)     NOT NULL,
 product_desc        VARCHAR2(300)    NOT NULL,
 stock               NUMERIC(12)     NOT NULL,
 brand               VARCHAR(120)    NOT NULL,
-measurement         VARCHAR(12)     NOT NULL,
+unit_id             VARCHAR(12)     NOT NULL,
 product_status      VARCHAR(32)		NOT NULL,
 create_at           DATE,
 update_at           DATE,
@@ -54,11 +54,14 @@ deleted             numeric(1) NOT NULL
 CREATE TABLE UNIT(
 abbreviation        VARCHAR(32)		NOT NULL PRIMARY KEY,
 name                VARCHAR(32)		NOT NULL,
-plural_name         VARCHAR(32)		NOT NULL
+plural_name         VARCHAR(32)		NOT NULL,
+create_at           DATE,
+update_at           DATE,
+deleted             numeric(1) NOT NULL
 );
 
 ALTER TABLE PRODUCT ADD CONSTRAINT product_status_fk FOREIGN KEY(product_status) REFERENCES PRODUCT_STATUS(status_id);
-ALTER TABLE PRODUCT ADD CONSTRAINT measurement_fk FOREIGN KEY(measurement) REFERENCES UNIT(abbreviation);
+ALTER TABLE PRODUCT ADD CONSTRAINT unit_id_fk FOREIGN KEY(unit_id) REFERENCES UNIT(abbreviation);
 
 ----------------------------:3----------------------------
 --insert tabla SERVICE_STATUS
@@ -127,14 +130,14 @@ insert into PRODUCT_STATUS values('ACT','ACTIVE',to_date ('21-04-2020','DD-MM-YY
 insert into PRODUCT_STATUS values('INA','INACTIVE',to_date ('21-04-2020','DD-MM-YYYY '),to_date ('21-04-2020','DD-MM-YYYY'),0);--unactive
 
 --insert tabla PRODUCT
-INSERT INTO PRODUCT (product_id,name,product_desc,stock,brand,weight,product_status,create_at,update_at,deleted)
+INSERT INTO PRODUCT (product_id,name,product_desc,stock,brand,unit_id,product_status,create_at,update_at,deleted)
 VALUES(
 SYS_GUID(),--product_id	        
 'Aceite de motor CASTROL EDGE',--name                
 'Castrol EDGE es un aceite para motor totalmente sintético desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
 15,--stock               
 'CASTROL EDGE',--brand               
-'L',--measurement             
+'L',--unit_id             
 'ACT',--product_status      
 to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at           
 to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
@@ -143,24 +146,33 @@ to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 
 ----------------------------:3----------------------------
 --insert tabla UNIT
-INSERT INTO UNIT (abbreviation, name, plural_name) 
+INSERT INTO UNIT (abbreviation, name, plural_name,create_at,update_at,deleted) 
 VALUES(
 'L',--abbreviation
 'Litro',--name
 'Litros'--plural_name
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
+0--deleted
 );
 
-INSERT INTO UNIT (abbreviation, name, plural_name) 
+INSERT INTO UNIT (abbreviation, name, plural_name,create_at,update_at,deleted) 
 VALUES(
 'U',--abbreviation
 'Unidad',--name
-'Unidades'--plural_name
+'Unidades',--plural_name
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
+0--deleted
 );
 
-INSERT INTO UNIT (abbreviation, name, plural_name) 
+INSERT INTO UNIT (abbreviation, name, plural_name,create_at,update_at,deleted) 
 VALUES(
 'K',--abbreviation
 'Kilo',--name
 'Kilos'--plural_name
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
+to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
+0--deleted
 );
 
