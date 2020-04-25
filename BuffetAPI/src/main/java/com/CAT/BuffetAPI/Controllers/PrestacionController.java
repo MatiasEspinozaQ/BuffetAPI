@@ -31,19 +31,19 @@ import com.CAT.BuffetAPI.Services.PrestacionesService;
 public class PrestacionController {
 	@Autowired
 	private PrestacionesService pre;
-	
+
 	@Autowired
 	private AuthService auth;
-	
+
 
 	@RequestMapping("/product")
-	private List<Product> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token,
-													@RequestParam (required = false) String brand,
-													@RequestParam (required = false) String name,
-													@RequestParam (required = false) String product_status,
-													@RequestParam (required = false) String deleted)
+	private List<Product> getAllProducts(HttpServletResponse res, @RequestHeader("token") String token,
+			@RequestParam (required = false) String brand,
+			@RequestParam (required = false) String name,
+			@RequestParam (required = false) String product_status,
+			@RequestParam (required = false) String deleted)
 	{
-	
+
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
@@ -60,50 +60,50 @@ public class PrestacionController {
 
 		try {
 
-				// Get the all the Users
-				HashMap<String,Object> data = new HashMap<>();
-				
-				if(brand!= null)
-				{
-					data.put("brand", brand);
-				}
-				if(name!=null)
-				{
-					data.put("name", name);
-				}
-				if(product_status!=null)
-				{
-					data.put("product_status", product_status);
-				}
-				if(deleted != null)
-				{
-					data.put("deleted", deleted);
-				}
-				else
-				{
-					data.put("deleted", false);
-				}
-				
-				System.out.println("preAsignacion");
-				List<Product> productos = pre.getDataProduct(data);
-				System.out.println("postAsignacion");
-				if(productos == null){
-					// 404 Not Found
-					res.setStatus(404);
-					return null;
-				}
+			// Get the all the Users
+			HashMap<String,Object> data = new HashMap<>();
 
-				// 200 OK
-				res.setStatus(200);
-				return productos;
-			
+			if(brand!= null)
+			{
+				data.put("brand", brand);
+			}
+			if(name!=null)
+			{
+				data.put("name", name);
+			}
+			if(product_status!=null)
+			{
+				data.put("product_status", product_status);
+			}
+			if(deleted != null)
+			{
+				data.put("deleted", deleted);
+			}
+			else
+			{
+				data.put("deleted", false);
+			}
+
+			System.out.println("preAsignacion");
+			List<Product> productos = pre.getDataProduct(data);
+			System.out.println("postAsignacion");
+			if(productos == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return productos;
+
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
 			res.setStatus(500);
 			return null;
 		}
-	
+
 	}
 
 
@@ -135,7 +135,7 @@ public class PrestacionController {
 				res.setStatus(404);
 				return null;
 			}
-			
+
 			// 200 OK
 			res.setStatus(200);
 			return product;
@@ -169,24 +169,24 @@ public class PrestacionController {
 		try {
 			String productId = product.getProduct_id();
 			Optional<Product> optProduct = pre.getOneProduct(productId);
-	
+
 			// If there is no matching User
 			if(!optProduct.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;
 			}
-	
+
 			Product oldProduct = optProduct.get();
-			
+
 			product.setCreate_at(oldProduct.getCreate_at());
 			product.setUpdate_at(new Date());
 			pre.UpdateProducto(product);
-	
+
 			// 200 OK
 			res.setStatus(200);
 			return "producto actualizado exitosamente";
-		
+
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
@@ -226,7 +226,7 @@ public class PrestacionController {
 
 			Product updatedProduct = producto.get();
 
-		
+
 			updatedProduct.setProduct_status(product_status);
 			pre.UpdateProducto(updatedProduct);
 
@@ -272,7 +272,7 @@ public class PrestacionController {
 			}
 
 			Product delProduct = producto.get();
-			
+
 			delProduct.setDeleted(true);
 			pre.UpdateProducto(delProduct);
 
@@ -323,7 +323,7 @@ public class PrestacionController {
 				res.setStatus(409);
 				return "El Producto no está Eliminado";
 			}
-			
+
 			resProduct.setDeleted(false);
 			pre.UpdateProducto(resProduct);
 
@@ -346,11 +346,11 @@ public class PrestacionController {
 	//===============================================================================================================================================================================//
 	@RequestMapping("/service")
 	private List<Service> getAllServ(HttpServletResponse res, @RequestHeader("token") String token,
-													@RequestParam (required = false) String name,
-													@RequestParam (required = false) String serv_status,
-													@RequestParam (required = false) String deleted)
+			@RequestParam (required = false) String name,
+			@RequestParam (required = false) String serv_status,
+			@RequestParam (required = false) String deleted)
 	{
-	
+
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
@@ -367,47 +367,47 @@ public class PrestacionController {
 
 		try {
 
-				// Get the all the Users
-				HashMap<String,Object> data = new HashMap<>();
-				
-				
-				if(name!=null)
-				{
-					data.put("name", name);
-				}
-				if(serv_status!=null)
-				{
-					data.put("serv_status", serv_status);
-				}
-				if(deleted != null)
-				{
-					data.put("deleted", deleted);
-				}
-				else
-				{
-					data.put("deleted", false);
-				}
-				
-				System.out.println("preAsignacion");
-				List<Service> productos = pre.getDataService(data);
-				System.out.println("postAsignacion");
-				if(productos == null){
-					// 404 Not Found
-					res.setStatus(404);
-					return null;
-				}
+			// Get the all the Users
+			HashMap<String,Object> data = new HashMap<>();
 
-				// 200 OK
-				res.setStatus(200);
-				return productos;
-			
+
+			if(name!=null)
+			{
+				data.put("name", name);
+			}
+			if(serv_status!=null)
+			{
+				data.put("serv_status", serv_status);
+			}
+			if(deleted != null)
+			{
+				data.put("deleted", deleted);
+			}
+			else
+			{
+				data.put("deleted", false);
+			}
+
+			System.out.println("preAsignacion");
+			List<Service> productos = pre.getDataService(data);
+			System.out.println("postAsignacion");
+			if(productos == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return productos;
+
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
 			res.setStatus(500);
 			return null;
 		}
-	
+
 	}
 
 
@@ -439,7 +439,7 @@ public class PrestacionController {
 				res.setStatus(404);
 				return null;
 			}
-			
+
 			// 200 OK
 			res.setStatus(200);
 			return servicio;
@@ -473,24 +473,24 @@ public class PrestacionController {
 		try {
 			String service_id = service.getServ_id();
 			Optional<Service> optService = pre.getOneService(service_id);
-	
+
 			// If there is no matching User
 			if(!optService.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;
 			}
-	
+
 			Service oldService = optService.get();
-			
+
 			service.setCreate_at(oldService.getCreate_at());
 			service.setUpdate_at(new Date());
 			pre.UpdateService(service);
-	
+
 			// 200 OK
 			res.setStatus(200);
 			return "servicio actualizado exitosamente";
-		
+
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
@@ -530,7 +530,7 @@ public class PrestacionController {
 
 			Service updatedServicio = servicio.get();
 
-		
+
 			updatedServicio.setServ_status(serv_status);
 			pre.UpdateService(updatedServicio);
 
@@ -576,7 +576,7 @@ public class PrestacionController {
 			}
 
 			Service delService = servicio.get();
-			
+
 			delService.setDeleted(true);
 			pre.UpdateService(delService);
 
@@ -627,7 +627,7 @@ public class PrestacionController {
 				res.setStatus(409);
 				return "El Servicio no está Eliminado";
 			}
-			
+
 			resService.setDeleted(false);
 			pre.UpdateService(resService);
 
@@ -643,12 +643,12 @@ public class PrestacionController {
 		}
 	}
 
-		//===============================================================================================================================================================================//
-		//===============================================================================================================================================================================//
-		//===============================================================================================================================================================================//
-		//===============================================================================================================================================================================//
-		//===============================================================================================================================================================================//
-	
+	//===============================================================================================================================================================================//
+	//===============================================================================================================================================================================//
+	//===============================================================================================================================================================================//
+	//===============================================================================================================================================================================//
+	//===============================================================================================================================================================================//
+
 	@RequestMapping("/serv_status")
 	private List<Service_status> getServStatus(HttpServletResponse res){
 
@@ -721,4 +721,77 @@ public class PrestacionController {
 			return null;
 		}
 	}
+	@RequestMapping("/product/low-stock")
+	private List<Product> getAllProducts(HttpServletResponse res, @RequestHeader("token") String token)
+
+	{
+
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		try {
+
+			// Get the all the Users
+			HashMap<String,Object> data = new HashMap<>();
+			data.put("deleted", false);
+			System.out.println("preAsignacion");
+			List<Product> productos = pre.getDataProduct(data);
+			List<Product> lowStock = new ArrayList<Product>();
+			System.out.println("postAsignacion");
+			if(productos == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+			for(Product p : productos)
+			{
+				switch(p.getUnit_id())
+				{
+				case "L":
+					if(p.getStock() < 10)
+					{
+						lowStock.add(p);
+					}
+					break;
+
+				case "U":
+					if(p.getStock() < 5)
+					{
+						lowStock.add(p);
+					}
+					break;
+
+
+				case "K":
+					if(p.getStock() < 20)
+					{
+						lowStock.add(p);
+					}
+					break;
+				}
+			}
+			// 200 OK
+			res.setStatus(200);
+			return lowStock;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+
+	}
+
 }

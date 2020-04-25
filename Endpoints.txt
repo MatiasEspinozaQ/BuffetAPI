@@ -113,6 +113,10 @@ http://localhost:8888/supply-adm/product/{id}/change-status POST
 http://localhost:8888/supply-adm/product/{id}/restore PUT
 	Recibe:token, id en la url 
 	Retorna: 200, 400 o 404 +mensaje
+http://localhost:8888/supply-adm/product/low-stock GET
+	Recibe:token
+	Retorna:lista de productos con stock bajo
+
 
 http://localhost:8888/supply-adm/service GET
 	Recibe:token
@@ -139,3 +143,4 @@ http://localhost:8888/supply-adm/units GET
 
 Reciben: nada
 Retornan: lista de estados o unidades de medida.
+
