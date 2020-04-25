@@ -21,7 +21,7 @@ import com.CAT.BuffetAPI.Repositories.userTypeRepository;
 
 
 
-//CRUD para usuarios, cualquier logica extra debe agregarse en el controlador.
+//CRUD para publicaciones, cualquier logica extra debe agregarse en el controlador.
 @Service
 public class PublicationService {
 

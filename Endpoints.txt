@@ -90,3 +90,41 @@ http://localhost:8888/pub-adm/publications/{Id}/change-status POST
 http://localhost:8888/pub-adm/public-status
 	recibe: nada
 	Retorna: json con todos los status de publicacion.
+
+/* ----------------------------------------------------------------------------------------------- */
+/* -------------------------------- Administracion de Prestaciones-------------------------------- */
+/* ----------------------------------------------------------------------------------------------- */
+
+http://localhost:8888/supply-adm/product GET
+	Recibe:token
+	Devuelve:todos los productos
+http://localhost:8888/supply-adm/product/{id} GET
+	Recibe:token y id en el url
+	Retorna: un producto en especifico
+http://localhost:8888/supply-adm/product/{id} POST
+	Recibe:token , id en el url y todas un producto entero
+	Retorna: 200 , 401 o 404 + mensaje
+http://localhost:8888/supply-adm/product/{id} DELETE
+	Recibe:token , id en el url
+	Retorna: 200 , 401 o 404 +mensaje
+http://localhost:8888/supply-adm/product/{id}/change-status POST
+	Recibe:token, id en la url y product_status (Probado con x-www-form-urlencoded)
+	Retorna: 200, 400 o 404 +mensaje
+http://localhost:8888/supply-adm/service GET
+	Recibe:token
+	Devuelve:todos los productos
+http://localhost:8888/supply-adm/service/{id} GET
+	Recibe:token y id en el url
+	Retorna: un producto en especifico
+http://localhost:8888/supply-adm/service/{id} POST
+	Recibe:token , id en el url y todas un producto entero
+	Retorna: 200 , 401 o 404 + mensaje
+http://localhost:8888/supply-adm/service/{id} DELETE
+	Recibe:token , id en el url
+	Retorna: 200 , 401 o 404 +mensaje
+http://localhost:8888/supply-adm/service/{id}/change-status POST
+	Recibe:token, id en la url y product_status (Probado con x-www-form-urlencoded)
+	Retorna: 200, 400 o 404 +mensaje
+
+
+

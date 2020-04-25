@@ -9,5 +9,5 @@ import com.CAT.BuffetAPI.Entities.User_status;
 
 @RepositoryRestResource
 public interface Public_statusRepository extends JpaRepository<Public_status, String>{
-
+	
 }

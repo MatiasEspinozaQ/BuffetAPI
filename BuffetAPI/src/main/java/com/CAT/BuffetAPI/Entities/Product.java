@@ -13,7 +13,7 @@ public class Product {
 	private String product_desc;
 	private int stock;
 	private String brand;
-	private String weight;
+	private String unit_id;
 	private String product_status;
 	private Date create_at;
 	private Date update_at;
@@ -49,11 +49,11 @@ public class Product {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	public String getWeight() {
-		return weight;
+	public String getUnit_id() {
+		return unit_id;
 	}
-	public void setWeight(String weight) {
-		this.weight = weight;
+	public void setUnit_id(String unit_id) {
+		this.unit_id = unit_id;
 	}
 	public String getProduct_status() {
 		return product_status;

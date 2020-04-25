@@ -17,7 +17,6 @@ public class Service {
 	private Date create_at;
 	private Date update_at;
 	private boolean deleted;
-	
 	public String getServ_id() {
 		return serv_id;
 	}
@@ -48,12 +47,6 @@ public class Service {
 	public void setEstimated_time(int estimated_time) {
 		this.estimated_time = estimated_time;
 	}
-	public String getServ_status() {
-		return serv_status;
-	}
-	public void setServ_status(String serv_status) {
-		this.serv_status = serv_status;
-	}
 	public Date getCreate_at() {
 		return create_at;
 	}
@@ -71,6 +64,12 @@ public class Service {
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	public String getServ_status() {
+		return serv_status;
+	}
+	public void setServ_status(String serv_status) {
+		this.serv_status = serv_status;
 	}
 	
 	
