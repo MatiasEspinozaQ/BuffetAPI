@@ -1,6 +1,7 @@
 package com.CAT.BuffetAPI.Controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,6 @@ public class MechanicController {
 	private AuthService auth;
 	
 
-	
 	@RequestMapping("/mechanics")
 	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token,
 													@RequestParam (required = false) String username,
@@ -115,9 +115,8 @@ public class MechanicController {
 	}
 
 
-
 	@RequestMapping(value="/mechanics/{Id}", method = {RequestMethod.GET})
-	private Optional<App_user> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
+	private Optional<App_user> getSpecificMech(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
 		if(id.isEmpty() || token.isEmpty()){
 			// 400 Bad Request
@@ -161,108 +160,16 @@ public class MechanicController {
 		}
 	}
 
-	
-	@RequestMapping(value = "/mechanics/{Id}/ban", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
-	{
-		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
-			return null;
-		}
-		HttpHeaders errorHeaders = new HttpHeaders();
-		List<String> typesAllowed = new ArrayList<String>();
-		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
-			// 401 Unauthorized
-			res.setStatus(401);
-			return null;
-		}
-		
-		App_user user;
-		user = app.getAppUser(Id).get();
-
-		if(user!= null )
-		{
-			if(user.getUser_type_id().equals("MEC"))
-			{
-				user.setStatus_id("BAN");;
-				app.updateUser(user);
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-			}
-			else
-			{
-				errorHeaders.set("error-code", "ERR-AUTH-002");
-				errorHeaders.set("error-desc", "tipo de usuario no existe");
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-			}
-
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-		}
-
-	}
-	
-	@RequestMapping(value = "/mechanics/{Id}/unban", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UnBan(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
-	{
-		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
-			return null;
-		}
-		HttpHeaders errorHeaders = new HttpHeaders();
-		List<String> typesAllowed = new ArrayList<String>();
-		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
-			// 401 Unauthorized
-			res.setStatus(401);
-			return null;
-		}
-		
-		App_user user;
-		user = app.getAppUser(Id).get();
-
-		if(user!= null )
-		{
-			if(user.getUser_type_id().equals("MEC"))
-			{
-				user.setStatus_id("ACT");;
-				app.updateUser(user);
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-			}
-			else
-			{
-				errorHeaders.set("error-code", "ERR-AUTH-002");
-				errorHeaders.set("error-desc", "tipo de usuario no existe");
-				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-			}
-
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-		}
-
-	}
 
 	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
+	private String UpdateMech(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user reqUser,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
+
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
@@ -270,42 +177,102 @@ public class MechanicController {
 			res.setStatus(401);
 			return null;
 		}
-		List<App_user> allUsers = new ArrayList<App_user>();
-		boolean existe = false;
-		allUsers = app.getAllMecha();
-		for(App_user u : allUsers)
-		{
-			if(u.getAppuser_id().equals(Id))
-			{
-				existe = true;
-				break;
+
+		try {
+			String userId = reqUser.getAppuser_id();
+			Optional<App_user> optUser = app.getAppUser(userId);
+	
+			// If there is no matching User
+			if(!optUser.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
 			}
-		}
-
-		if(existe) {
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
+	
+			App_user oldUser = optUser.get();
+			
+			reqUser.setAppuser_id(oldUser.getAppuser_id());
+			reqUser.setLastlogin(oldUser.getLastlogin());
+			reqUser.setCreated_at(oldUser.getCreated_at());
+			reqUser.setHash(oldUser.getHash());
+			reqUser.setUpdated_at(new Date());
+			app.updateUser(reqUser);
+	
+			// 200 OK
+			res.setStatus(200);
+			return "Usuario actualizado exitosamente";
+		
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
 		}
 	}
 
-	
+
+	@RequestMapping(value = "/mechanics/{Id}/change-status", method = {RequestMethod.POST})
+	private String ChangeStatus(HttpServletResponse res, @PathVariable String Id ,@RequestParam("status")String status,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			App_user updateUser = user.get();
+
+			// Revisa si el Usuario es un Mecánico
+			if(!updateUser.getUser_type_id().equals("MEC")){
+				// 409 Conflict
+				res.setStatus(409);
+				return null;
+			}
+			
+			updateUser.setStatus_id(status);
+			app.updateUser(updateUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Status actualizado exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
 
 	@RequestMapping(value= "/mechanics/{Id}", method = {RequestMethod.DELETE})
-	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	private String DeleteMech(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
+
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
@@ -313,36 +280,84 @@ public class MechanicController {
 			res.setStatus(401);
 			return null;
 		}
-		List<App_user> allUsers = new ArrayList<App_user>();
-		boolean existe = false;
-		allUsers = app.getAllMecha();
-		App_user user = null;
-		for(App_user u : allUsers)
-		{
-			if(u.getAppuser_id().equals(Id))
-			{
-				existe = true;
-				user = u;
-				break;
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
 			}
+
+			App_user delUser = user.get();
+			
+			delUser.setDeleted(true);
+			app.updateUser(delUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Mecánico Eliminado Exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
 		}
-
-		if(existe) {
-			user.setDeleted(true);
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
-		}
-
-
 	}
 
+	@RequestMapping(value= "/mechanics/{Id}/restore", method = {RequestMethod.PUT})
+	private String RestoreMech(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
 
-		
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the User
+			Optional<App_user> user = app.getAppUser(Id);
+
+			// If there is no matching User
+			if(!user.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			App_user resUser = user.get();
+
+			if(!resUser.isDeleted()){
+				// 409 Conflict
+				res.setStatus(409);
+				return "El Mecánico no está Eliminado";
+			}
+			
+			resUser.setDeleted(false);
+			app.updateUser(resUser);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Mecánico Restaurado Exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
 }

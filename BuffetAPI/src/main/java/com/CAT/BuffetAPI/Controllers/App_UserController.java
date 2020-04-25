@@ -165,67 +165,15 @@ public class App_UserController {
 	}
 
 
-	@RequestMapping("/user-type")
-	private List<User_type> getAllTypes(HttpServletResponse res){
-
-		try {
-			// Get the all the Users
-			List<User_type> typeList = app.getAllTypes();
-
-			if(typeList == null){
-				// 404 Not Found
-				res.setStatus(404);
-				return null;
-			}
-
-			// 200 OK
-			res.setStatus(200);
-			return typeList;
-
-		} catch (Exception e) {
-			// If There was an error connecting to the server
-			// 500 Internal Server Error
-			res.setStatus(500);
-			return null;
-		}
-	}
-
-
-	@RequestMapping("/user-status")
-	private List<User_status> getAllStatus(HttpServletResponse res){
-
-		try {
-			// Get the all the Users
-			List<User_status> typeList = app.getAllStatus();
-
-			if(typeList == null){
-				// 404 Not Found
-				res.setStatus(404);
-				return null;
-			}
-
-			// 200 OK
-			res.setStatus(200);
-			return typeList;
-
-		} catch (Exception e) {
-			// If There was an error connecting to the server
-			// 500 Internal Server Error
-			res.setStatus(500);
-			return null;
-		}
-	}
-
-
 	@RequestMapping(value= "/users/{Id}", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user user,@RequestHeader("token") String token)
+	private String UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody App_user reqUser,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
+
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
@@ -233,25 +181,36 @@ public class App_UserController {
 			res.setStatus(401);
 			return null;
 		}
-		System.out.println(Id);
 
-
-		if( app.getAppUser(user.getAppuser_id()).isPresent()) {
-			App_user old = app.getAppUser(user.getAppuser_id()).get();
-			user.setAppuser_id(old.getAppuser_id());
-			user.setLastlogin(old.getLastlogin());
-			user.setCreated_at(old.getCreated_at());
-			user.setHash(old.getHash());
-			user.setUpdated_at(new Date());
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
+		try {
+			String userId = reqUser.getAppuser_id();
+			Optional<App_user> optUser = app.getAppUser(userId);
+	
+			// If there is no matching User
+			if(!optUser.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+	
+			App_user oldUser = optUser.get();
+			
+			reqUser.setAppuser_id(oldUser.getAppuser_id());
+			reqUser.setLastlogin(oldUser.getLastlogin());
+			reqUser.setCreated_at(oldUser.getCreated_at());
+			reqUser.setHash(oldUser.getHash());
+			reqUser.setUpdated_at(new Date());
+			app.updateUser(reqUser);
+	
+			// 200 OK
+			res.setStatus(200);
+			return "Usuario actualizado exitosamente";
+		
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
 		}
 	}
 
@@ -272,6 +231,7 @@ public class App_UserController {
 			res.setStatus(401);
 			return null;
 		}
+
 		User_type theType = null;
 		for(User_type types : type.findAll())
 		{
@@ -280,6 +240,7 @@ public class App_UserController {
 				theType = types;
 			}
 		}
+
 		App_user user;
 		user = app.getAppUser(Id).get();
 
@@ -309,7 +270,6 @@ public class App_UserController {
 
 	}
 
-	
 	@RequestMapping(value = "/users/{Id}/change-status", method = {RequestMethod.POST})
 	private String ChangeStatus(HttpServletResponse res, @PathVariable String Id ,@RequestParam("status")String status,@RequestHeader("token") String token)
 	{
@@ -452,81 +412,55 @@ public class App_UserController {
 		}
 	}
 
-	@RequestMapping(value = "/users/{Id}/ban", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
-	{
-		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
+
+	@RequestMapping("/user-type")
+	private List<User_type> getAllTypes(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<User_type> typeList = app.getAllTypes();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
-		List<String> typesAllowed = new ArrayList<String>();
-		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
-			// 401 Unauthorized
-			res.setStatus(401);
-			return null;
-		}
-
-		App_user user;
-		user = app.getAppUser(Id).get();
-
-		if(user!= null )
-		{
-			user.setStatus_id("BAN");;
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-		}
-
 	}
 
-	@RequestMapping(value = "/users/{Id}/unban", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UnBan(HttpServletResponse res, @PathVariable String Id ,@RequestHeader("token") String token)
-	{
-		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
+	@RequestMapping("/user-status")
+	private List<User_status> getAllStatus(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<User_status> typeList = app.getAllStatus();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
 			return null;
 		}
-		HttpHeaders errorHeaders = new HttpHeaders();
-		List<String> typesAllowed = new ArrayList<String>();
-		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
-			// 401 Unauthorized
-			res.setStatus(401);
-			return null;
-		}
-
-		App_user user;
-		user = app.getAppUser(Id).get();
-
-		if(user!= null )
-		{
-
-			user.setStatus_id("ACT");;
-			app.updateUser(user);
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
-
-
-		}
-		else
-		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
-			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
-		}
-
 	}
-
-
 
 }
