@@ -189,3 +189,5 @@ to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
 to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at           
 0--deleted 
 );
+
+commit;
