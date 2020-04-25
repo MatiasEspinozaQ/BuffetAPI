@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.CAT.BuffetAPI.Entities.Product;
+import com.CAT.BuffetAPI.Entities.Product_status;
 import com.CAT.BuffetAPI.Entities.Service;
+import com.CAT.BuffetAPI.Entities.Service_status;
+import com.CAT.BuffetAPI.Entities.Unit;
+import com.CAT.BuffetAPI.Entities.User_status;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.CAT.BuffetAPI.Services.PrestacionesService;
 
@@ -639,4 +643,82 @@ public class PrestacionController {
 		}
 	}
 
+		//===============================================================================================================================================================================//
+		//===============================================================================================================================================================================//
+		//===============================================================================================================================================================================//
+		//===============================================================================================================================================================================//
+		//===============================================================================================================================================================================//
+	
+	@RequestMapping("/serv_status")
+	private List<Service_status> getServStatus(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<Service_status> typeList = pre.getAllservStatus();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+	@RequestMapping("/product-status")
+	private List<Product_status> getAllProductStatus(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<Product_status> typeList = pre.getAllProductStatus();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+	@RequestMapping("/units")
+	private List<Unit> getAllStatus(HttpServletResponse res){
+
+		try {
+			// Get the all the Users
+			List<Unit> typeList = pre.getAllUnits();
+
+			if(typeList == null){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			// 200 OK
+			res.setStatus(200);
+			return typeList;
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
 }

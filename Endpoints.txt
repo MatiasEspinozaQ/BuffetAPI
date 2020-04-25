@@ -110,6 +110,10 @@ http://localhost:8888/supply-adm/product/{id} DELETE
 http://localhost:8888/supply-adm/product/{id}/change-status POST
 	Recibe:token, id en la url y product_status (Probado con x-www-form-urlencoded)
 	Retorna: 200, 400 o 404 +mensaje
+http://localhost:8888/supply-adm/product/{id}/restore PUT
+	Recibe:token, id en la url 
+	Retorna: 200, 400 o 404 +mensaje
+
 http://localhost:8888/supply-adm/service GET
 	Recibe:token
 	Devuelve:todos los productos
@@ -125,6 +129,13 @@ http://localhost:8888/supply-adm/service/{id} DELETE
 http://localhost:8888/supply-adm/service/{id}/change-status POST
 	Recibe:token, id en la url y product_status (Probado con x-www-form-urlencoded)
 	Retorna: 200, 400 o 404 +mensaje
+http://localhost:8888/supply-adm/service/{id}/restore PUT
+	Recibe:token, id en la url 
+	Retorna: 200, 400 o 404 +mensaje
 
+http://localhost:8888/supply-adm/service-status GET
+http://localhost:8888/supply-adm/product-status GET
+http://localhost:8888/supply-adm/units GET
 
-
+Reciben: nada
+Retornan: lista de estados o unidades de medida.
