@@ -42,79 +42,86 @@ public class App_UserController {
 	@Autowired
 	private userTypeRepository type;
 
+	private void log(String msg) {
+		System.out.println(msg);
+	}
+	private void logLine() {
+		System.out.println("----------------------------------------------------------------");
+	}
 
 	@RequestMapping("/users")
-	private List<App_user> getAllUsers(HttpServletResponse res, @RequestHeader("token") String token, @RequestParam (required = false) String username,
-																									  @RequestParam (required = false) String email,
-			                                                                                          @RequestParam (required = false) String user_type_id,
-			                                                                                          @RequestParam (required = false) String status_id,
-			                                                                                          @RequestParam (required = false) String deleted)
+	private List<App_user> getAllUsers(
+		HttpServletResponse res, 
+		@RequestHeader("token") String token, 
+		@RequestParam (required = false) String username,
+		@RequestParam (required = false) String email,
+		@RequestParam (required = false) String user_type_id,
+		@RequestParam (required = false) String status_id,
+		@RequestParam (required = false) String deleted)
 	{
+		logLine();
+
 		if(token.isEmpty()){
-			// 400 Bad Request
-			res.setStatus(400);
+			// 401 Unauthorized
+			res.setStatus(401);
+			log("No hay JWT presente: 401 Unauthorized");
 			return null;
 		}
 
+		log("Revisando permisos...");
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
+			log("Usuario no autorizado: 401 Unauthorized");
 			return null;
 		}
+		log("Usuario autorizado");
+		
 
 		try {
-			// Get the all the Users
+
+			// Define filter data
 			HashMap<String,Object> data = new HashMap<>();
 			
-			if(username!= null)
-			{
-				data.put("username", username);
-			}
-			if(email!=null)
-			{
-				data.put("email", email);
-			}if(user_type_id!= null)
-			{
-				data.put("user_type_id", user_type_id);
-			}
-			if(status_id!=null)
-			{
-				data.put("status_id", status_id);
-			}
-			if(deleted != null)
-			{
-				data.put("deleted", deleted);
-			}
-			else
-			{
-				data.put("deleted", false);
-			}
+			if(username!= null) 	data.put("username", username);
+			if(email!=null)			data.put("email", email);
+			if(user_type_id!= null)	data.put("user_type_id", user_type_id);
+			if(status_id!=null)		data.put("status_id", status_id);
+
+			if(deleted != null)		data.put("deleted", deleted);
+			else					data.put("deleted", false);
 			
-			System.out.println("preAsignacion");
+			// Conseguir todos los usuarios de la BD
+			log("Consiguiendo usuarios de la BD");
 			List<App_user> userList = app.getData(data);
-			System.out.println("postAsignacion");
+			
+			// Revisar si la lista es válida
 			if(userList == null){
 				// 404 Not Found
 				res.setStatus(404);
+				log("Usuarios no encontrados: 404 Not Found");
 				return null;
 			}
+			log("Usuarios Encontrados");
 
+			// Eliminar los hash de los Usuarios por seguridad
 			for (App_user app_user : userList) {
 				app_user.setHash("");
 			}
 
 			// 200 OK
 			res.setStatus(200);
+			log("Proceso existoso: 200 OK");
 			return userList;
-			//return userList;
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
-			System.out.println(e);
 			res.setStatus(500);
+			log("Error conectando con la BD: 500 Internal Server Error\nERROR:\n");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -123,43 +130,57 @@ public class App_UserController {
 	@RequestMapping(value="/users/{Id}", method = {RequestMethod.GET})
 	private App_user getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
-		if(id.isEmpty() || token.isEmpty()){
+		logLine();
+
+		if(id.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
+			log("No hay ningun Id en la URL: 400 Bad Request");
 			return null;
 		}
 
-		// Check for authorization
+		// Revisar Autorización
+		log("Revisando permisos...");
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
-		if(!auth.Authorize(token, typesAllowed)){
+		if(token.isEmpty() || !auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
+			log("Usuario no autorizado: 401 Unauthorized");
 			return null;
 		}
+		log("Usuario autorizado");
 
 		try {
-			// Get the User
+			// Conseguir el Usuario
+			log("Consiguiendo usuario de la BD");
 			Optional<App_user> user = app.getAppUser(id);
 
-			// If there is no matching User
+			// Si el Usuario no está presente
 			if(!user.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
+				log("Usuario no encontrado: 404 Not Found");
 				return null;
 			}
 
 			App_user final_user = user.get();
+			log("Usuario Encontrado");
+
+			// Eliminar los hash de los Usuarios por seguridad
 			final_user.setHash("");
 
 			// 200 OK
 			res.setStatus(200);
+			log("Proceso existoso: 200 OK");
 			return final_user;
 
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
 			res.setStatus(500);
+			log("Error conectando con la BD: 500 Internal Server Error\nERROR:\n");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -171,45 +192,58 @@ public class App_UserController {
 		if(token.isEmpty()){
 			// 400 Bad Request
 			res.setStatus(400);
+			log("No hay JWT presente: 400 Bad Request");
 			return null;
 		}
 
+		log("Revisando permisos...");
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
+			log("Usuario no autorizado: 401 Unauthorized");
 			return null;
 		}
+		log("Usuario autorizado");
 
 		try {
+			// Sava el Id del Usuario enviado en la request
 			String userId = reqUser.getAppuser_id();
+			
+			log("Consiguiendo usuario de la BD");
 			Optional<App_user> optUser = app.getAppUser(userId);
 	
 			// If there is no matching User
 			if(!optUser.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
+				log("Usuario no encontrado: 404 Not Found");
 				return null;
 			}
-	
+
 			App_user oldUser = optUser.get();
+			log("Usuario Encontrado");
 			
+			log("Editando datos");
 			reqUser.setAppuser_id(oldUser.getAppuser_id());
 			reqUser.setLastlogin(oldUser.getLastlogin());
 			reqUser.setCreated_at(oldUser.getCreated_at());
 			reqUser.setHash(oldUser.getHash());
 			reqUser.setUpdated_at(new Date());
 			app.updateUser(reqUser);
+			log("Datos editados con exito");
 	
 			// 200 OK
 			res.setStatus(200);
+			log("Proceso existoso: 200 OK");
 			return "Usuario actualizado exitosamente";
 		
 		} catch (Exception e) {
 			// If There was an error connecting to the server
 			// 500 Internal Server Error
 			res.setStatus(500);
+			log("Error conectando con la BD: 500 Internal Server Error\nERROR:\n");
 			return null;
 		}
 	}

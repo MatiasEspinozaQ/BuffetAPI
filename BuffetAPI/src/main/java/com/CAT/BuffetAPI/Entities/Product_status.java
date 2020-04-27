@@ -13,34 +13,43 @@ public class Product_status {
 	private Date create_at;
 	private Date update_at;
 	private boolean deleted;
-	
-	public String getPublic_status_id() {
-		return status_id;
+
+	public String getStatus_id() {
+		return this.status_id;
 	}
-	public void setPublic_status_id(String public_status_id) {
-		this.status_id = public_status_id;
+
+	public void setStatus_id(String status_id) {
+		this.status_id = status_id;
 	}
-	public String getStatus_name() {
-		return status;
+
+	public String getStatus() {
+		return this.status;
 	}
-	public void setStatus_name(String status_name) {
-		this.status = status_name;
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	public Date getCreated_at() {
-		return create_at;
+
+	public Date getCreate_at() {
+		return this.create_at;
 	}
-	public void setCreated_at(Date created_at) {
-		this.create_at = created_at;
+
+	public void setCreate_at(Date create_at) {
+		this.create_at = create_at;
 	}
+
 	public Date getUpdate_at() {
-		return update_at;
+		return this.update_at;
 	}
+
 	public void setUpdate_at(Date update_at) {
 		this.update_at = update_at;
 	}
+
 	public boolean isDeleted() {
-		return deleted;
+		return this.deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}

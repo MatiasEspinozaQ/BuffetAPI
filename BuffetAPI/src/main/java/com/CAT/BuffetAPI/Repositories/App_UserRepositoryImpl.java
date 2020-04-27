@@ -24,7 +24,6 @@ public class App_UserRepositoryImpl {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<App_user> query= cb.createQuery(App_user.class);
 		Root<App_user> root = query.from(App_user.class);
-		System.out.println("creada query");
 		List<Predicate> predicates = new ArrayList<>();
 		conditions.forEach((field,value) ->
 		{
@@ -32,25 +31,20 @@ public class App_UserRepositoryImpl {
 			{
 				
 				case "username":
-					System.out.println("añadido username");
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "email":
-					System.out.println("añadido email");
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "user_type_id":
-					System.out.println("añadido tipo");
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "status_id":
-					System.out.println("añadido status");
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "deleted":
 					if(value.equals("true"))
 					{
-					System.out.println("añadido deleted");
 					predicates.add(cb.equal(root.get("deleted"), 1));
 					break;
 					}
@@ -66,7 +60,6 @@ public class App_UserRepositoryImpl {
 		 //no usuarios eliminados
 		
 		query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
-		System.out.println("Query Lista");
 		return em.createQuery(query).getResultList(); 		
 	}
 }
