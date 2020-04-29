@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Entities.Product;
 import com.CAT.BuffetAPI.Entities.Product_status;
 import com.CAT.BuffetAPI.Entities.Service;
 import com.CAT.BuffetAPI.Entities.Service_status;
 import com.CAT.BuffetAPI.Entities.Unit;
 import com.CAT.BuffetAPI.Entities.User_status;
+import com.CAT.BuffetAPI.Entities.Verificationtoken;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.CAT.BuffetAPI.Services.PrestacionesService;
 
@@ -36,7 +41,7 @@ public class PrestacionController {
 	private AuthService auth;
 
 
-	@RequestMapping("/product")
+	@RequestMapping(value = "/product",method = {RequestMethod.GET})
 	private List<Product> getAllProducts(HttpServletResponse res, @RequestHeader("token") String token,
 			@RequestParam (required = false) String brand,
 			@RequestParam (required = false) String name,
@@ -104,6 +109,29 @@ public class PrestacionController {
 			return null;
 		}
 
+	}
+	
+	@PostMapping(value = "/product")
+	public String addProduct(@RequestBody Product product , HttpServletResponse resp) {
+		// Valida si existe el mail y username del nuevo APP_USER
+		if(auth.ProductValidation(product)) {
+			// Setea datos generales
+			product.setUpdate_at(new Date());
+			product.setCreate_at(new Date());
+			// Agrega al Usuario a la BD. 
+			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
+			product = pre.UpdateProducto(product);
+
+			// Status 200 y retorna el Id del APP_USER nuevo
+			resp.setStatus(200);
+			return product.getProduct_id();
+		}
+		else
+		{
+			// 409 Conflict
+			resp.setStatus(409);
+			return "Producto ya existe";
+		}
 	}
 
 
@@ -344,7 +372,7 @@ public class PrestacionController {
 	//===============================================================================================================================================================================//
 	//===============================================================================================================================================================================//
 	//===============================================================================================================================================================================//
-	@RequestMapping("/service")
+	@RequestMapping(value = "/service", method = {RequestMethod.GET})
 	private List<Service> getAllServ(HttpServletResponse res, @RequestHeader("token") String token,
 			@RequestParam (required = false) String name,
 			@RequestParam (required = false) String serv_status,
@@ -408,6 +436,29 @@ public class PrestacionController {
 			return null;
 		}
 
+	}
+	
+	@PostMapping(value = "/service")
+	public String addService(@RequestBody Service service , HttpServletResponse resp) {
+		// Valida si existe el mail y username del nuevo APP_USER
+		if(auth.ServicetValidation(service)) {
+			// Setea datos generales
+			service.setUpdate_at(new Date());
+			service.setCreate_at(new Date());
+			// Agrega al Usuario a la BD. 
+			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
+			service = pre.UpdateService(service);
+
+			// Status 200 y retorna el Id del APP_USER nuevo
+			resp.setStatus(200);
+			return service.getServ_id();
+		}
+		else
+		{
+			// 409 Conflict
+			resp.setStatus(409);
+			return "Servicio ya existe";
+		}
 	}
 
 

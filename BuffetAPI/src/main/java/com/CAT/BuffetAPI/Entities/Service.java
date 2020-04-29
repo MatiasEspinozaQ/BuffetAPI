@@ -3,11 +3,16 @@ package com.CAT.BuffetAPI.Entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Service {
 	@Id
+	@GeneratedValue(generator="db-guid")
+	@GenericGenerator(name="db-guid", strategy = "guid") 
 	private String serv_id;	
 	private String name;
 	private int price;

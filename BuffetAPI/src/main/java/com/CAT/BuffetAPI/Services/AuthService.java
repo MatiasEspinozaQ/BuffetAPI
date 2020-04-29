@@ -1,5 +1,6 @@
 package com.CAT.BuffetAPI.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.CAT.BuffetAPI.Entities.App_user;
+import com.CAT.BuffetAPI.Entities.Product;
 import com.CAT.BuffetAPI.Repositories.App_UserRepository;
 
 import io.jsonwebtoken.Claims;
@@ -29,6 +31,9 @@ public class AuthService {
 	private App_UserRepository appUserRepository;
 	@Autowired
 	private App_UserService appService;
+	@Autowired
+	private PrestacionesService presService;
+	
 
 	@Value ("${secretKey}")
 	private String SecretKey;
@@ -162,4 +167,36 @@ public class AuthService {
 
 		  return Hex.encodeHexString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
 		}
+
+	public boolean ProductValidation(Product product) {
+		List<Product> productos = new ArrayList<Product>();
+		productos = presService.getAllProducts();
+		
+		for(Product p : productos)
+		{
+			if(product.getName().equals(p.getName()))
+			{
+				return false;
+				
+			}
+			System.out.println("paso prueba de nombre");
+			
+		}
+		return true;
+	}
+	public boolean ServicetValidation(com.CAT.BuffetAPI.Entities.Service service) {
+		List<com.CAT.BuffetAPI.Entities.Service> servicios = new ArrayList<com.CAT.BuffetAPI.Entities.Service>();
+		servicios = presService.getAllServices();
+		
+		for(com.CAT.BuffetAPI.Entities.Service s : servicios)
+		{
+			if(service.getName().equals(s.getName()))
+			{
+				return false;
+			}
+			System.out.println("paso prueba de nombre");
+			
+		}
+		return true;
+	}
 }
