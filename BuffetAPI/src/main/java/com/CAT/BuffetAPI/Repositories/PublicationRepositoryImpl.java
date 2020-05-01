@@ -31,7 +31,7 @@ public class PublicationRepositoryImpl {
 			switch (field)
 			{
 				
-				case "region":
+				case "comuna":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "public_status_id":

@@ -1,0 +1,10 @@
+
+JARAMILLO BD
+	Se agrega una nueva columna a la tabla APP_USER llamado rut
+	Se cambian los nombres de los tipos de ususarios en USER_TYPE
+	
+PUBLICACIONES_D
+	Se cambian los nombres de los estados de las publicaciones
+	
+PRESTACIONES_BD
+	se agrega la columna stock_alert

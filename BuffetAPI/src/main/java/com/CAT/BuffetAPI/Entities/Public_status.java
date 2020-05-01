@@ -8,28 +8,29 @@ import javax.persistence.Id;
 @Entity
 public class Public_status {
 	@Id
-	public String status_id;
-	public String status;
-	public Date create_at;
+	public String public_status_id;
+	public String status_name;
+	public Date created_at;
 	public Date update_at;
 	public boolean deleted;
-	public String getStatus_id() {
-		return status_id;
+
+	public String getPublic_status_id() {
+		return public_status_id;
 	}
-	public void setStatus_id(String status_id) {
-		this.status_id = status_id;
+	public void sePublic_status_id(String public_status_id) {
+		this.public_status_id = public_status_id;
 	}
-	public String getStatus() {
-		return status;
+	public String getStatus_name() {
+		return status_name;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatus_name(String status_name) {
+		this.status_name = status_name;
 	}
-	public Date getCreate_at() {
-		return create_at;
+	public Date getCreated_at() {
+		return created_at;
 	}
-	public void setCreate_at(Date create_at) {
-		this.create_at = create_at;
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
 	}
 	public Date getUpdate_at() {
 		return update_at;

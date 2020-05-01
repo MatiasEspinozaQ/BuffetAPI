@@ -45,7 +45,7 @@ public class PublicationController {
 
 	@RequestMapping("/publications")
 	private List<Publication> getAllPublications(HttpServletResponse res, @RequestHeader("token") String token,
-			@RequestParam(required = false) String region
+			@RequestParam(required = false) String comuna
 			,@RequestParam(required = false) String public_status_id
 			,@RequestParam(required = false) String bussiness_name
 			,@RequestParam(required = false) String title
@@ -69,9 +69,9 @@ public class PublicationController {
 			// Get the all the Users
 			HashMap<String,Object> data = new HashMap<>();
 
-			if(region!= null)
+			if(comuna!= null)
 			{
-				data.put("region", region);
+				data.put("comuna", comuna);
 			}
 			if(public_status_id!=null)
 			{
@@ -95,7 +95,9 @@ public class PublicationController {
 			}
 
 
-			if(pubrepo.getData(data).isEmpty()){
+			List<Publication> pubList = pubrepo.getData(data);
+
+			if(pubList == null){
 				// 404 Not Found
 				res.setStatus(404);
 				return null;
@@ -117,7 +119,7 @@ public class PublicationController {
 
 
 	@RequestMapping(value="/publications/{Id}", method = {RequestMethod.GET})
-	private Optional<Publication> getSpecificUser(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
+	private Optional<Publication> getSpecificPub(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
 		if(id.isEmpty() || token.isEmpty()){
 			// 400 Bad Request
@@ -159,7 +161,7 @@ public class PublicationController {
 
 
 	@RequestMapping(value= "/publications/{Id}", method = {RequestMethod.DELETE})
-	private ResponseEntity<JsonObject> DeleteUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	private ResponseEntity<JsonObject> DeletePub(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -204,8 +206,62 @@ public class PublicationController {
 
 	}
 
+
+	@RequestMapping(value= "/publications/{Id}/restore", method = {RequestMethod.PUT})
+	private String RestoreUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	{
+		if(token.isEmpty()){
+			// 400 Bad Request
+			res.setStatus(400);
+			return null;
+		}
+
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
+
+		try {
+			// Get the Publication
+			Optional<Publication> publication = pub.getOnePublication(Id);
+
+			// If there is no matching User
+			if(!publication.isPresent()){
+				// 404 Not Found
+				res.setStatus(404);
+				return null;
+			}
+
+			Publication resPub = publication.get();
+
+			if(!resPub.isDeleted()){
+				// 409 Conflict
+				res.setStatus(409);
+				return "La Publicación no está Eliminada";
+			}
+			
+			resPub.setDeleted(false);
+			pub.UpdatePublication(resPub);
+
+			// 200 OK
+			res.setStatus(200);
+			return "Publicación Restaurada Exitosamente";
+
+		} catch (Exception e) {
+			// If There was an error connecting to the server
+			// 500 Internal Server Error
+			res.setStatus(500);
+			return null;
+		}
+	}
+
+
+
 	@RequestMapping(value = "/publications/{Id}/change-status", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> CambiarEstado(HttpServletResponse res, @PathVariable String Id ,@RequestParam("public_status_id")String public_status_id,@RequestHeader("token") String token)
+	private ResponseEntity<JsonObject> ChangeStatus(HttpServletResponse res, @PathVariable String Id ,@RequestParam("public_status_id")String public_status_id,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -223,7 +279,7 @@ public class PublicationController {
 		Public_status theStatus = null;
 		for(Public_status status : statusRepo.findAll())
 		{
-			if(status.getStatus_id().equals(public_status_id))
+			if(status.getPublic_status_id().equals(public_status_id))
 			{
 				theStatus = status;
 			}
@@ -235,7 +291,7 @@ public class PublicationController {
 		{
 			if(theStatus != null)
 			{
-				publication.setPublic_status_id(theStatus.getStatus_id());
+				publication.setPublic_status_id(theStatus.getPublic_status_id());
 				pub.UpdatePublication(publication);
 				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.OK); 
 			}
@@ -256,6 +312,7 @@ public class PublicationController {
 		}
 
 	}
+
 
 	@RequestMapping("/public-status")
 	private List<Public_status> getAllStatus(HttpServletResponse res){
@@ -282,8 +339,9 @@ public class PublicationController {
 		}
 	}
 
+	
 	@RequestMapping(value= "/publications/{Id}", method = {RequestMethod.POST})
-	private ResponseEntity<JsonObject> UpdateUser(HttpServletResponse res,@PathVariable String Id, @RequestBody Publication publication,@RequestHeader("token") String token)
+	private ResponseEntity<JsonObject> UpdatePub(HttpServletResponse res,@PathVariable String Id, @RequestBody Publication publication,@RequestHeader("token") String token)
 	{
 
 		if(token.isEmpty()){
