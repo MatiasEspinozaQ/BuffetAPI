@@ -34,6 +34,7 @@ CREATE TABLE PRODUCT(
 product_id	        VARCHAR(32)		NOT NULL PRIMARY KEY,
 name                VARCHAR(120)     NOT NULL,
 product_desc        VARCHAR2(300)    NOT NULL,
+price               NUMERIC(15)     NOT NULL,
 stock               NUMERIC(12)     NOT NULL,
 stock_alert         NUMERIC(12)     NOT NULL,
 brand               VARCHAR(120)    NOT NULL,
@@ -76,7 +77,7 @@ INSERT INTO SERVICE
 VALUES('09F686761827CF8AE040578CB20B7491',--serv_id
 'Cambio De Aceite',--serv_name
 28000,--serv_price
-'Utilizamos las mejores marcas para el cambio de aceite de su vehÌculo',--serv_desc
+'Utilizamos las mejores marcas para el cambio de aceite de su veh√≠culo',--serv_desc
 00.28,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -90,7 +91,7 @@ INSERT INTO SERVICE
 VALUES('09F686761828CF8AE040578CB20B7491',--serv_id
 'Correas Accesorio',--serv_name
 40000,--serv_price
-'Utilizamos las mejores marcas para el cambio de correas y accesorios de su vehÌculo',--serv_desc
+'Utilizamos las mejores marcas para el cambio de correas y accesorios de su veh√≠culo',--serv_desc
 00.28,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -104,7 +105,7 @@ INSERT INTO SERVICE
 VALUES('09F686761829CF8AE040578CB20B7491',--serv_id
 'Desabolladura y Pintura',--serv_name
 55000,--serv_price
-'Brindamos una soluciÛn integral de desabolladura y pintura en tiempo record. Reparamos pintura, abollones, rayas, piquetes y medianas colisiones.',--serv_desc
+'Brindamos una soluci√≥n integral de desabolladura y pintura en tiempo record. Reparamos pintura, abollones, rayas, piquetes y medianas colisiones.',--serv_desc
 00.45,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -116,9 +117,9 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,create_at,update_at,deleted) 
 VALUES('09F68676182ACF8AE040578CB20B7491',--serv_id
-'Cambio de neum·ticos',--serv_name
+'Cambio de neum√°ticos',--serv_name
 30000,--serv_price
-'Utilizamos las mejores marcas en neum·ticos para cambiarselos a tu coche',--serv_desc
+'Utilizamos las mejores marcas en neum√°ticos para cambiarselos a tu coche',--serv_desc
 02.00,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -162,11 +163,12 @@ to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 );
 
 --insert tabla PRODUCT
-INSERT INTO PRODUCT (product_id,name,product_desc,stock,stock_alert,brand,unit_id,product_status,create_at,update_at,deleted)
+INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,unit_id,product_status,create_at,update_at,deleted)
 VALUES(
 SYS_GUID(),--product_id	        
 'Aceite de motor CASTROL EDGE',--name                
-'Castrol EDGE es un aceite para motor totalmente sintÈtico desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
+'Castrol EDGE es un aceite para motor totalmente sint√©tico desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
+15000,
 15,--stock 
 5,--stock_alert
 'CASTROL EDGE',--brand               
@@ -178,11 +180,12 @@ to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 );
 
 
-INSERT INTO PRODUCT (product_id,name,product_desc,stock,stock_alert,brand,unit_id,product_status,create_at,update_at,deleted)
+INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,unit_id,product_status,create_at,update_at,deleted)
 VALUES(
 SYS_GUID(),--product_id	        
-'Neum·ticos TURANZA ER33',--name                
-'A los coches de lujo les vendr· como anillo al dedo el Bridgestone ER33, un neum·tico creado especialmente para este tipo de automÛviles gracias a su alto rendimiento.',--product_desc        
+'Neum√°ticos TURANZA ER33',--name                
+'A los coches de lujo les vendr√° como anillo al dedo el Bridgestone ER33, un neum√°tico creado especialmente para este tipo de autom√≥viles gracias a su alto rendimiento.',--product_desc        
+35000,
 20,--stock   
 12,--stock_alert            
 'BRIDGESTONE',--brand               
