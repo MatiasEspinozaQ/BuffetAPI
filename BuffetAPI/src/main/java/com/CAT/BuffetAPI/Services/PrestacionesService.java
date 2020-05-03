@@ -124,7 +124,6 @@ public class PrestacionesService {
 	public List<Product> getDataProduct(HashMap data)
 	{
 		return productos.getData(data);
-		
 	}
 	public List<com.CAT.BuffetAPI.Entities.Service> getDataService(HashMap data)
 	{

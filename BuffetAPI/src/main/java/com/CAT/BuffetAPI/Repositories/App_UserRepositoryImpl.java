@@ -33,7 +33,7 @@ public class App_UserRepositoryImpl {
 				case "username":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
-				case "email":
+				case "rut":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
 				case "user_type_id":

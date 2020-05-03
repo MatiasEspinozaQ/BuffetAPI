@@ -10,10 +10,12 @@ PUBLICACIONES_BD
 	Se agrega CASCADE CONSTRAINTS a la tabla PUBLICATION
 	
 PRESTACIONES_BD
-	se agrega la columna stock_alert a la tabla PRODUCT
+	Se agrega la columna  a la tabla PRODUCT				stock_alert
+	Se agrega la columna  a la tabla PRODUCT				price
+	
 	Se cambia la variable "create_at" a "created_at" en las tablas SERVICE, SERVICE_STATUS, PRODUCT, PRODUCT_STATUS Y UNIT
 	Se cambia la variable "update_at" a "updated_at" en las tablas SERVICE, SERVICE_STATUS, PRODUCT, PRODUCT_STATUS Y UNIT
-	Se agrega una nueva columna a la tabla PRODUCT llamada price
+	
 	Se cambia el tipo de conversión de minutos de float a numeric(15) (00.25 a 25 en minutos)
 	
 GENERAL

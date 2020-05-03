@@ -13,25 +13,25 @@ public class Publication {
 	@Id
 	@GeneratedValue(generator="db-guid")
 	@GenericGenerator(name="db-guid", strategy = "guid") 
-	 private String public_id;
-	 private String   appuser_id;
-	 private String    user_type_id;
-	 private String   public_status_id;
-	 private Date   created_at;
-	 private Date   update_at;
-	 private boolean deleted;
-	 private String   title;
-	 private String   public_desc;
-	 private String  schedule;
-	 private String   services;
-	 private String   bussiness_name;
-	 private String   address;
-	 private String   comuna;
-	 private String   region;
-	 private String   landline;
-	 private String   mobile_number;
-	 private String   email;
-	 private int   views;
+	private String public_id;
+	private String   appuser_id;
+	private String    user_type_id;
+	private String   public_status_id;
+	private Date   created_at;
+	private Date updated_at;
+	private boolean deleted;
+	private String   title;
+	private String   public_desc;
+	private String  schedule;
+	private String   services;
+	private String   bussiness_name;
+	private String   address;
+	private String   comuna;
+	private String   region;
+	private String   landline;
+	private String   mobile_number;
+	private String   email;
+	private int   views;
 	
 	 public String getPublic_id() {
 		return public_id;
@@ -63,11 +63,11 @@ public class Publication {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
-	public Date getUpdate_at() {
-		return update_at;
+	public Date getUpdated_at() {
+		return updated_at;
 	}
-	public void setUpdate_at(Date update_at) {
-		this.update_at = update_at;
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
 	}
 	public boolean isDeleted() {
 		return deleted;

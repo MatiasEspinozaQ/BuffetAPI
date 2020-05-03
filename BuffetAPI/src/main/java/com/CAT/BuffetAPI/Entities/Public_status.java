@@ -11,7 +11,7 @@ public class Public_status {
 	public String public_status_id;
 	public String status_name;
 	public Date created_at;
-	public Date update_at;
+	public Date updated_at;
 	public boolean deleted;
 
 	public String getPublic_status_id() {
@@ -32,11 +32,11 @@ public class Public_status {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
-	public Date getUpdate_at() {
-		return update_at;
+	public Date getUpdated_at() {
+		return updated_at;
 	}
-	public void setUpdate_at(Date update_at) {
-		this.update_at = update_at;
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
 	}
 	public boolean isDeleted() {
 		return deleted;

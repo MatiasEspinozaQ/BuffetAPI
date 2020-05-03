@@ -35,13 +35,14 @@ public class App_user {
 	private boolean mail_confirmed;
 	private String rut;
 	
-	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date lastlogin;
 	
 	private String user_type_id;
 	private String status_id;
 	private boolean deleted;
+	private Date updated_at;
+	private Date created_at;
 	
 	public String getRut() {
 		return rut;
@@ -61,8 +62,6 @@ public class App_user {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
-	private Date updated_at;
-	private Date created_at;
 	
 	public String getAppuser_id() {
 		return appuser_id;

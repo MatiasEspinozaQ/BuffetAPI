@@ -54,7 +54,7 @@ public class App_UserController {
 		HttpServletResponse res, 
 		@RequestHeader("token") String token, 
 		@RequestParam (required = false) String username,
-		@RequestParam (required = false) String email,
+		@RequestParam (required = false) String rut,
 		@RequestParam (required = false) String user_type_id,
 		@RequestParam (required = false) String status_id,
 		@RequestParam (required = false) String deleted)
@@ -86,7 +86,7 @@ public class App_UserController {
 			HashMap<String,Object> data = new HashMap<>();
 			
 			if(username!= null) 	data.put("username", username);
-			if(email!=null)			data.put("email", email);
+			if(rut!=null)			data.put("rut", rut);
 			if(user_type_id!= null)	data.put("user_type_id", user_type_id);
 			if(status_id!=null)		data.put("status_id", status_id);
 

@@ -41,7 +41,7 @@ public class MechanicController {
 	@RequestMapping("/mechanics")
 	private List<App_user> getAllMecha(HttpServletResponse res, @RequestHeader("token") String token,
 													@RequestParam (required = false) String username,
-													@RequestParam (required = false) String email,
+													@RequestParam (required = false) String rut,
 													@RequestParam (required = false) String status_id,
 													@RequestParam (required = false) String deleted)
 	{
@@ -69,9 +69,9 @@ public class MechanicController {
 				{
 					data.put("username", username);
 				}
-				if(email!=null)
+				if(rut!=null)
 				{
-					data.put("email", email);
+					data.put("rut", rut);
 				}
 				if(status_id!=null)
 				{
@@ -86,9 +86,8 @@ public class MechanicController {
 					data.put("deleted", false);
 				}
 				
-				System.out.println("preAsignacion");
 				List<App_user> userList = app.getData(data);
-				System.out.println("postAsignacion");
+
 				if(userList == null){
 					// 404 Not Found
 					res.setStatus(404);

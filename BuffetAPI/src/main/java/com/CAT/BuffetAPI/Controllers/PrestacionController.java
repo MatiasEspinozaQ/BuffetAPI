@@ -5,12 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.CAT.BuffetAPI.Entities.App_user;
 import com.CAT.BuffetAPI.Entities.Product;
 import com.CAT.BuffetAPI.Entities.Product_status;
 import com.CAT.BuffetAPI.Entities.Service;
 import com.CAT.BuffetAPI.Entities.Service_status;
 import com.CAT.BuffetAPI.Entities.Unit;
-import com.CAT.BuffetAPI.Entities.User_status;
-import com.CAT.BuffetAPI.Entities.Verificationtoken;
 import com.CAT.BuffetAPI.Services.AuthService;
 import com.CAT.BuffetAPI.Services.PrestacionesService;
 
@@ -68,30 +63,15 @@ public class PrestacionController {
 			// Get the all the Users
 			HashMap<String,Object> data = new HashMap<>();
 
-			if(brand!= null)
-			{
-				data.put("brand", brand);
-			}
-			if(name!=null)
-			{
-				data.put("name", name);
-			}
-			if(product_status!=null)
-			{
-				data.put("product_status", product_status);
-			}
-			if(deleted != null)
-			{
-				data.put("deleted", deleted);
-			}
-			else
-			{
-				data.put("deleted", false);
-			}
+			if(brand!= null) 			data.put("brand", brand);
+			if(name!=null) 				data.put("name", name);
+			if(product_status!=null) 	data.put("product_status", product_status);
+			if(deleted != null) 		data.put("deleted", deleted);
+			else 						data.put("deleted", false);
 
-			System.out.println("preAsignacion");
+
 			List<Product> productos = pre.getDataProduct(data);
-			System.out.println("postAsignacion");
+
 			if(productos == null){
 				// 404 Not Found
 				res.setStatus(404);
@@ -113,13 +93,12 @@ public class PrestacionController {
 	
 	@PostMapping(value = "/product")
 	public String addProduct(@RequestBody Product product , HttpServletResponse resp) {
-		// Valida si existe el mail y username del nuevo APP_USER
+
 		if(auth.ProductValidation(product)) {
 			// Setea datos generales
-			product.setUpdate_at(new Date());
-			product.setCreate_at(new Date());
-			// Agrega al Usuario a la BD. 
-			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
+			product.setUpdated_at(new Date());
+			product.setCreated_at(new Date());
+			
 			product = pre.UpdateProducto(product);
 
 			// Status 200 y retorna el Id del APP_USER nuevo
@@ -207,8 +186,8 @@ public class PrestacionController {
 
 			Product oldProduct = optProduct.get();
 
-			product.setCreate_at(oldProduct.getCreate_at());
-			product.setUpdate_at(new Date());
+			product.setCreated_at(oldProduct.getCreated_at());
+			product.setUpdated_at(new Date());
 			pre.UpdateProducto(product);
 
 			// 200 OK
@@ -443,8 +422,8 @@ public class PrestacionController {
 		// Valida si existe el mail y username del nuevo APP_USER
 		if(auth.ServicetValidation(service)) {
 			// Setea datos generales
-			service.setUpdate_at(new Date());
-			service.setCreate_at(new Date());
+			service.setUpdated_at(new Date());
+			service.setCreated_at(new Date());
 			// Agrega al Usuario a la BD. 
 			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
 			service = pre.UpdateService(service);
@@ -534,8 +513,8 @@ public class PrestacionController {
 
 			Service oldService = optService.get();
 
-			service.setCreate_at(oldService.getCreate_at());
-			service.setUpdate_at(new Date());
+			service.setCreated_at(oldService.getCreated_at());
+			service.setUpdated_at(new Date());
 			pre.UpdateService(service);
 
 			// 200 OK
@@ -749,7 +728,7 @@ public class PrestacionController {
 		}
 	}
 	@RequestMapping("/units")
-	private List<Unit> getAllStatus(HttpServletResponse res){
+	private List<Unit> getAllUnits(HttpServletResponse res){
 
 		try {
 			// Get the all the Users

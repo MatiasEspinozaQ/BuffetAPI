@@ -16,76 +16,110 @@ public class Product {
 	private String product_id;
 	private String name;
 	private String product_desc;
+	private String price;
 	private int stock;
+	private String stock_alert;
 	private String brand;
 	private String unit_id;
 	private String product_status;
-	private Date create_at;
-	private Date update_at;
+	private Date created_at;
+	private Date updated_at;
 	private boolean deleted;
-	
+
 	public String getProduct_id() {
-		return product_id;
+		return this.product_id;
 	}
+
 	public void setProduct_id(String product_id) {
 		this.product_id = product_id;
 	}
+
 	public String getName() {
-		return name;
+		return this.name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getProduct_desc() {
-		return product_desc;
+		return this.product_desc;
 	}
+
 	public void setProduct_desc(String product_desc) {
 		this.product_desc = product_desc;
 	}
-	public int getStock() {
-		return stock;
+
+	public String getPrice() {
+		return this.price;
 	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public int getStock() {
+		return this.stock;
+	}
+
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	public String getBrand() {
-		return brand;
+
+	public String getStock_alert() {
+		return this.stock_alert;
 	}
+
+	public void setStock_alert(String stock_alert) {
+		this.stock_alert = stock_alert;
+	}
+
+	public String getBrand() {
+		return this.brand;
+	}
+
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
+
 	public String getUnit_id() {
-		return unit_id;
+		return this.unit_id;
 	}
+
 	public void setUnit_id(String unit_id) {
 		this.unit_id = unit_id;
 	}
+
 	public String getProduct_status() {
-		return product_status;
+		return this.product_status;
 	}
+
 	public void setProduct_status(String product_status) {
 		this.product_status = product_status;
 	}
-	public Date getCreate_at() {
-		return create_at;
+
+	public Date getCreated_at() {
+		return this.created_at;
 	}
-	public void setCreate_at(Date create_at) {
-		this.create_at = create_at;
+
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
 	}
-	public Date getUpdate_at() {
-		return update_at;
+
+	public Date getUpdated_at() {
+		return this.updated_at;
 	}
-	public void setUpdate_at(Date update_at) {
-		this.update_at = update_at;
+
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
 	}
+
 	public boolean isDeleted() {
-		return deleted;
+		return this.deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
-
 
 }

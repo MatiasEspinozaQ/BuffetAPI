@@ -30,7 +30,6 @@ public class ProductRepositoryImpl {
 		{
 			switch (field)
 			{
-				
 				case "brand":
 					predicates.add(cb.like(root.get(field),"%"+(String)value+"%"));
 					break;
@@ -42,20 +41,13 @@ public class ProductRepositoryImpl {
 					break;
 				case "deleted":
 					if(value.equals("true"))
-					{
-					System.out.println("añadido deleted");
-					predicates.add(cb.equal(root.get("deleted"), 1));
-					break;
-					}
+						predicates.add(cb.equal(root.get("deleted"), 1));
 					else
-					{
 						predicates.add(cb.equal(root.get("deleted"),0));
-					}
-				
+					break;
 			}
-			
 		});
 		query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
-		return em.createQuery(query).getResultList(); 		
+		return em.createQuery(query).getResultList();
 	}
 }
