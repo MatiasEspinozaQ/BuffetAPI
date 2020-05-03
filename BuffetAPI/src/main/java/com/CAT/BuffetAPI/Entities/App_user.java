@@ -33,6 +33,8 @@ public class App_user {
 	private String phone;
 	private Date birthday;
 	private boolean mail_confirmed;
+	private String rut;
+	
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date lastlogin;
@@ -41,7 +43,12 @@ public class App_user {
 	private String status_id;
 	private boolean deleted;
 	
-	
+	public String getRut() {
+		return rut;
+	}
+	public void setRut(String rut) {
+		this.rut = rut;
+	}
 	public Date getUpdated_at() {
 		return updated_at;
 	}
