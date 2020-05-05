@@ -62,7 +62,7 @@ INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) V
 INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('CAJ', 'Cajero', SYSDATE, SYSDATE, 0);
 INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('VEN', 'Vendedor', SYSDATE, SYSDATE, 0);
 INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('SUP', 'Supervisor', SYSDATE, SYSDATE, 0);
-INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('MEC', 'Mec·nico', SYSDATE, SYSDATE, 0);
+INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('MEC', 'Mec√°nico', SYSDATE, SYSDATE, 0);
 INSERT INTO USER_TYPE ( USER_TYPE_ID, NAME, CREATED_AT , UPDATED_AT , DELETED) VALUES('TES', 'Testing', SYSDATE, SYSDATE, 0);
 
 INSERT INTO USER_STATUS ( STATUS_ID , STATUS , CREATED_AT , UPDATED_AT , DELETED) VALUES('BAN', 'Desactivado', SYSDATE, SYSDATE, 0);
@@ -121,7 +121,7 @@ VALUES(
 	'753923b3a91b753ca991116df61a90c06f97721277cb2829b21a4a209f7aa932', -- HASH : irin.munoz
 	'irin.munoz@gmail.cl', -- EMAIL
 	'Irina', -- NAME
-	'MuÒoz', -- LAST_NAMES
+	'Mu√±oz', -- LAST_NAMES
     '20.124.502-8',--RUT
 	'Calle los Dogo #696', -- ADRESS
 	'+5697777777', -- PHONE
@@ -136,7 +136,7 @@ VALUES(
 );
 
 
--- MEC¡NICA CON MAIL CONFIRMADO
+-- MEC√ÅNICA CON MAIL CONFIRMADO
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
 	SYS_GUID(), -- APPUSER_ID
@@ -159,7 +159,7 @@ VALUES(
 );
 
 
--- MEC¡NICA CON MAIL SIN CONFIRMAR
+-- MEC√ÅNICA CON MAIL SIN CONFIRMAR
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
 	SYS_GUID(), -- APPUSER_ID
@@ -180,7 +180,7 @@ VALUES(
 	0, -- DELETED
 	TO_DATE('2020/03/25 17:08:11', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
 );
---MEC¡NICO PUBLICACI”N 1
+--MEC√ÅNICO PUBLICACI√ìN 1
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
 	'7CD5B7769DF75CEFE034080020825436', -- APPUSER_ID
@@ -202,7 +202,7 @@ VALUES(
 	TO_DATE('2020/04/05 19:08:11', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
 );
 
---MEC¡NICO PUBLICACI”N 2
+--MEC√ÅNICO PUBLICACI√ìN 2
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
 	'7CD5B7769DF85CEFE034080020825436', -- APPUSER_ID
@@ -291,13 +291,13 @@ values
     to_date ('13-04-2020 10:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Automotriz J.D.C Suzuki',--title
-    'Servicio Suzuki.Chevrolet,Mazda, Mantenciones de kilometraje y desabolladura.Personal especializado en las marcas.GarantÌa por trabajos realizados.20 aÒos de experiencia en el rubro.',--public_desc
+    'Servicio Suzuki.Chevrolet,Mazda, Mantenciones de kilometraje y desabolladura.Personal especializado en las marcas.Garant√≠a por trabajos realizados.20 a√±os de experiencia en el rubro.',--public_desc
     'De 8:30 a 19:30, abierto toda la semana',--schedule
-    'Mec·nica general, Mantenciones preventivas, AlineaciÛn, Balanceo, Frenos, Embrague, Afinamiento, Scanner, Limpieza de tapiz, Cambio de aceite, Tren delantero, Emergencia 24 horas,
+    'Mec√°nica general, Mantenciones preventivas, Alineaci√≥n, Balanceo, Frenos, Embrague, Afinamiento, Scanner, Limpieza de tapiz, Cambio de aceite, Tren delantero, Emergencia 24 horas,
     Simunizado y encerado, Diagnostico Computarizado',--services
     'Automotriz J.D.C',--bussiness_name
-    'Calle Fern·ndez Concha 146, —uÒoa, RegiÛn Metropolitana',--adress
-    '—uÒoa',--comuna
+    'Calle Fern√°ndez Concha 146, √ëu√±oa, Regi√≥n Metropolitana',--adress
+    '√ëu√±oa',--comuna
     'Metropolitana',--region
     '(2)22744400',--landline
     '0',--mobile_number
@@ -316,16 +316,16 @@ values
     to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
     0,--deleted
     'Kaiser Lubricentro',--title
-    'Kaiser Lubricentro un taller automotriz dedicado a dar servicios de lubricaciÛn en general tanto para vehÌculos bencineros como diesel. cambiamos el aceite de motor, caja de cambio, mec·nica o autom·tica, diferenciales, cajas de transparencias, direcciÛn, hidr·ulica, etc.',--public_desc
+    'Kaiser Lubricentro un taller automotriz dedicado a dar servicios de lubricaci√≥n en general tanto para veh√≠culos bencineros como diesel. cambiamos el aceite de motor, caja de cambio, mec√°nica o autom√°tica, diferenciales, cajas de transparencias, direcci√≥n, hidr√°ulica, etc.',--public_desc
     'De 9:30 a 18:30, de lunes a viernes',--schedule
     'CAMBIO DE ACEITE,El cambio de aceite se debe realizar cada 5.000 kms o cada 10.000 kms dependiento del aceite que se utilice.
-     AFINAMIENTO, El afinamiento se debe realizar cada 15.000 o 20.000 kms. (Una vez al aÒo aproximadamente)
-     MECANICA, Mec·nica express consiste en trabajos que tardan desde 2 hrs. a 1 dÌa o 2 dependiendo de lo que necesite.
+     AFINAMIENTO, El afinamiento se debe realizar cada 15.000 o 20.000 kms. (Una vez al a√±o aproximadamente)
+     MECANICA, Mec√°nica express consiste en trabajos que tardan desde 2 hrs. a 1 d√≠a o 2 dependiendo de lo que necesite.
      ACCESORIOS,Accesorios para diferentes cosas del auto, dependiendo de lo que necesite.',--services
     'Kaiser Lubricentro',--bussiness_name
-    'Avenida ColÛn 2878,ValparaÌso, RegiÛn V',--adress
-    'ValparaÌso',--comuna
-    'RegiÛn V',--region
+    'Avenida Col√≥n 2878,Valpara√≠so, Regi√≥n V',--adress
+    'Valpara√≠so',--comuna
+    'Regi√≥n V',--region
     '(32)2492905',--landline
     '0',--mobile_number
     'KaiserContacto@gmail.com',--email
@@ -373,7 +373,7 @@ INSERT INTO SERVICE
 VALUES('09F686761827CF8AE040578CB20B7491',--serv_id
 'Cambio De Aceite',--serv_name
 28000,--serv_price
-'Utilizamos las mejores marcas para el cambio de aceite de su vehÌculo',--serv_desc
+'Utilizamos las mejores marcas para el cambio de aceite de su veh√≠culo',--serv_desc
 28,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -387,7 +387,7 @@ INSERT INTO SERVICE
 VALUES('09F686761828CF8AE040578CB20B7491',--serv_id
 'Correas Accesorio',--serv_name
 40000,--serv_price
-'Utilizamos las mejores marcas para el cambio de correas y accesorios de su vehÌculo',--serv_desc
+'Utilizamos las mejores marcas para el cambio de correas y accesorios de su veh√≠culo',--serv_desc
 28,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -401,7 +401,7 @@ INSERT INTO SERVICE
 VALUES('09F686761829CF8AE040578CB20B7491',--serv_id
 'Desabolladura y Pintura',--serv_name
 55000,--serv_price
-'Brindamos una soluciÛn integral de desabolladura y pintura en tiempo record. Reparamos pintura, abollones, rayas, piquetes y medianas colisiones.',--serv_desc
+'Brindamos una soluci√≥n integral de desabolladura y pintura en tiempo record. Reparamos pintura, abollones, rayas, piquetes y medianas colisiones.',--serv_desc
 45,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -413,9 +413,9 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,created_at,updated_at,deleted) 
 VALUES('09F68676182ACF8AE040578CB20B7491',--serv_id
-'Cambio de neum·ticos',--serv_name
+'Cambio de neum√°ticos',--serv_name
 30000,--serv_price
-'Utilizamos las mejores marcas en neum·ticos para cambiarselos a tu coche',--serv_desc
+'Utilizamos las mejores marcas en neum√°ticos para cambiarselos a tu coche',--serv_desc
 120,--estimated_time
 'ACT',--serv_status
 to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--create_at
@@ -506,7 +506,7 @@ INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,
 VALUES(
 SYS_GUID(),--product_id	        
 'Aceite de motor CASTROL EDGE',--name                
-'Castrol EDGE es un aceite para motor totalmente sintÈtico desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
+'Castrol EDGE es un aceite para motor totalmente sint√©tico desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
 15000,--price
 15,--stock 
 5,--stock_alert
@@ -522,8 +522,8 @@ to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,unit_id,product_status,created_at,updated_at,deleted)
 VALUES(
 SYS_GUID(),--product_id	        
-'Neum·ticos TURANZA ER33',--name                
-'A los coches de lujo les vendr· como anillo al dedo el Bridgestone ER33, un neum·tico creado especialmente para este tipo de automÛviles gracias a su alto rendimiento.',--product_desc        
+'Neum√°ticos TURANZA ER33',--name                
+'A los coches de lujo les vendr√° como anillo al dedo el Bridgestone ER33, un neum√°tico creado especialmente para este tipo de autom√≥viles gracias a su alto rendimiento.',--product_desc        
 35000,--price
 20,--stock   
 12,--stock_alert            
