@@ -139,7 +139,7 @@ VALUES(
 -- MECÁNICA CON MAIL CONFIRMADO
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
-	SYS_GUID(), -- APPUSER_ID
+	'5D0E6C7B078A4B0AB3B5C459641213FB', -- APPUSER_ID
 	'ReGarrido', -- USERNAME
 	'55648da29f4d04cbddcd9f82f43c26068ffdc63749a6b2bda0b617ab8286dd61', -- HASH : Renata1659
 	'rgarrido@gmail.cl', -- EMAIL
@@ -162,7 +162,7 @@ VALUES(
 -- MECÁNICA CON MAIL SIN CONFIRMAR
 INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
 VALUES(
-	SYS_GUID(), -- APPUSER_ID
+	'6A79225115CB499C8C72B9340EEEC5CA', -- APPUSER_ID
 	'EdMartinez', -- USERNAME
 	'512d71cd1dd152f74cee02d2e6b1be673291529c1557557f97a02ec2f8cc5a58', -- HASH : Renata1659
 	'edu.martinez@gmail.cl', -- EMAIL
@@ -222,6 +222,72 @@ VALUES(
 	TO_DATE('2020/04/18 12:02:43', 'yyyy/mm/dd hh24:mi:ss'), -- UPDATED_AT
 	0, -- DELETED
 	TO_DATE('2020/04/05 12:02:43', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
+);
+
+--VENDEDOR
+INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
+VALUES(
+	'3E309C13E3314519A9270C336AFB75C2', -- APPUSER_ID
+	'Emili', -- USERNAME
+	'8da2356132869bdab475d5f76bab9cff39b61746ffa932c5ed1afbfa95ce8b1b', -- HASH : emilia1998
+	'emiliBags@gmail.cl', -- EMAIL
+	'Emilia', -- NAME
+	'Bolson de la Comarca', -- LAST_NAMES
+    '19.215.891-8',--RUT
+	'Alto Prado, Melipilla', -- ADRESS
+	'+56924521857', -- PHONE
+	TO_DATE('1998/01/25 00:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- BIRTHDAY
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- LASTLOGIN
+	1, -- MAIL_CONFIRMED
+	'VEN', -- USER_TYPE_ID
+	'ACT', -- STATUS_ID
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- UPDATED_AT
+	0, -- DELETED
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
+);
+
+--CAJERO
+INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
+VALUES(
+	'5093234C73AE4954BB6DD7E841FEEE12', -- APPUSER_ID
+	'Alberto', -- USERNAME
+	'cc32c652f58a1d69439bf48f5ed27d2a32ce782d784372d55646ac02888d6d30', -- HASH : Alberto123.
+	'albert@gmail.cl', -- EMAIL
+	'Alberto', -- NAME
+	'Castro Vera', -- LAST_NAMES
+    '16.215.831-0',--RUT
+	'Las berenjenas, Melipilla', -- ADRESS
+	'+56924524578', -- PHONE
+	TO_DATE('1993/09/20 00:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- BIRTHDAY
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- LASTLOGIN
+	1, -- MAIL_CONFIRMED
+	'CAJ', -- USER_TYPE_ID
+	'ACT', -- STATUS_ID
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- UPDATED_AT
+	0, -- DELETED
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
+);
+
+--CLIENTE
+INSERT INTO APP_USER (APPUSER_ID, USERNAME, HASH, EMAIL, NAME, LAST_NAMES, RUT, ADRESS, PHONE, BIRTHDAY, LASTLOGIN, MAIL_CONFIRMED, USER_TYPE_ID, STATUS_ID, UPDATED_AT, DELETED, CREATED_AT)
+VALUES(
+	'70BA44E0EC9A42018FA0D9465CC695B5', -- APPUSER_ID
+	'Catalina', -- USERNAME
+	'9244f0b6bc02caa32c439602ff832e0778d7fd355ce8dec3af9f8efa0c5ae070', -- HASH : emilia1998
+	'catalin@gmail.cl', -- EMAIL
+	'Catalina', -- NAME
+	'Latorre Villacura', -- LAST_NAMES
+    '17.215.238-5',--RUT
+	'PSJA Kast, Melipilla', -- ADRESS
+	'+56978549865', -- PHONE
+	TO_DATE('1997/11/01 00:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- BIRTHDAY
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- LASTLOGIN
+	1, -- MAIL_CONFIRMED
+	'CLI', -- USER_TYPE_ID
+	'ACT', -- STATUS_ID
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss'), -- UPDATED_AT
+	0, -- DELETED
+	TO_DATE('2020/05/14 12:00:00', 'yyyy/mm/dd hh24:mi:ss') -- CREATED_AT
 );
 
 
@@ -370,7 +436,7 @@ insert into SERVICE_STATUS values('INA','Inactivo', to_date ('20-04-2020','DD-MM
 --servicio cambio de aceite 
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,created_at,updated_at,deleted) 
-VALUES('09F686761827CF8AE040578CB20B7491',--serv_id
+VALUES('A7515A96926141479DEC462D7CC647F0',--serv_id
 'Cambio De Aceite',--serv_name
 28000,--serv_price
 'Utilizamos las mejores marcas para el cambio de aceite de su vehículo',--serv_desc
@@ -384,7 +450,7 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 --servicio accesorio
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,created_at,updated_at,deleted) 
-VALUES('09F686761828CF8AE040578CB20B7491',--serv_id
+VALUES('50D00011F4994D4FBB4FBDA04D2AFB97',--serv_id
 'Correas Accesorio',--serv_name
 40000,--serv_price
 'Utilizamos las mejores marcas para el cambio de correas y accesorios de su vehículo',--serv_desc
@@ -398,7 +464,7 @@ to_date ('05-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 --servicio mano de obra
 INSERT INTO SERVICE
 (serv_id,name,price,serv_desc,estimated_time,serv_status,created_at,updated_at,deleted) 
-VALUES('09F686761829CF8AE040578CB20B7491',--serv_id
+VALUES('44703D2E22344158BAE3E3BB30699F06',--serv_id
 'Desabolladura y Pintura',--serv_name
 55000,--serv_price
 'Brindamos una solución integral de desabolladura y pintura en tiempo record. Reparamos pintura, abollones, rayas, piquetes y medianas colisiones.',--serv_desc
@@ -504,7 +570,7 @@ to_date ('24-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 --insert tabla PRODUCT
 INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,unit_id,product_status,created_at,updated_at,deleted)
 VALUES(
-SYS_GUID(),--product_id	        
+'D9CCD278B8B849788F1F4FF6E074B499',--product_id	        
 'Aceite de motor CASTROL EDGE',--name                
 'Castrol EDGE es un aceite para motor totalmente sintético desarrollado para conductores que solo quieren lo mejor de sus motores.',--product_desc        
 15000,--price
@@ -521,7 +587,7 @@ to_date ('21-04-2020 11:00 AM','DD-MM-YYYY HH:MI AM'),--update_at
 
 INSERT INTO PRODUCT (product_id,name,product_desc,price,stock,stock_alert,brand,unit_id,product_status,created_at,updated_at,deleted)
 VALUES(
-SYS_GUID(),--product_id	        
+'BB5801A8406F49CC953A277F918E770D',--product_id	        
 'Neumáticos TURANZA ER33',--name                
 'A los coches de lujo les vendrá como anillo al dedo el Bridgestone ER33, un neumático creado especialmente para este tipo de automóviles gracias a su alto rendimiento.',--product_desc        
 35000,--price
