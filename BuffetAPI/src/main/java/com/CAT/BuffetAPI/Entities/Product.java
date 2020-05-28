@@ -18,7 +18,7 @@ public class Product {
 	private String product_desc;
 	private String price;
 	private int stock;
-	private String stock_alert;
+	private int stock_alert;
 	private String brand;
 	private String unit_id;
 	private String product_status;
@@ -66,11 +66,11 @@ public class Product {
 		this.stock = stock;
 	}
 
-	public String getStock_alert() {
+	public int getStock_alert() {
 		return this.stock_alert;
 	}
 
-	public void setStock_alert(String stock_alert) {
+	public void setStock_alert(int stock_alert) {
 		this.stock_alert = stock_alert;
 	}
 

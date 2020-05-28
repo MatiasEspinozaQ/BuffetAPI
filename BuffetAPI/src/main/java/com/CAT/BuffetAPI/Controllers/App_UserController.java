@@ -71,6 +71,8 @@ public class App_UserController {
 		log("Revisando permisos...");
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("CAJ");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -143,6 +145,8 @@ public class App_UserController {
 		log("Revisando permisos...");
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("CAJ");
+		typesAllowed.add("VEN");
 		if(token.isEmpty() || !auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -448,8 +452,18 @@ public class App_UserController {
 
 
 	@RequestMapping("/user-type")
-	private List<User_type> getAllTypes(HttpServletResponse res){
+	private List<User_type> getAllTypes(HttpServletResponse res,@RequestHeader("token") String token){
 
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
+		typesAllowed.add("CAJ");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			log("Usuario no autorizado: 401 Unauthorized");
+			return null;
+		}
 		try {
 			// Get the all the Users
 			List<User_type> typeList = app.getAllTypes();
@@ -473,8 +487,19 @@ public class App_UserController {
 	}
 
 	@RequestMapping("/user-status")
-	private List<User_status> getAllStatus(HttpServletResponse res){
+	private List<User_status> getAllStatus(HttpServletResponse res,@RequestHeader("token") String token){
 
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
+		typesAllowed.add("CAJ");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			log("Usuario no autorizado: 401 Unauthorized");
+			return null;
+		}
+		
 		try {
 			// Get the all the Users
 			List<User_status> typeList = app.getAllStatus();

@@ -52,6 +52,7 @@ public class PrestacionController {
 
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -107,6 +108,7 @@ public class PrestacionController {
 		}
 		else
 		{
+			
 			// 409 Conflict
 			resp.setStatus(409);
 			return "Producto ya existe";
@@ -126,6 +128,7 @@ public class PrestacionController {
 		// Check for authorization
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -136,7 +139,7 @@ public class PrestacionController {
 			// Get the User
 			Optional<Product> product = pre.getOneProduct(id);
 
-			// If there is no matching User
+			// If there is no matching Product
 			if(!product.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -177,7 +180,7 @@ public class PrestacionController {
 			String productId = product.getProduct_id();
 			Optional<Product> optProduct = pre.getOneProduct(productId);
 
-			// If there is no matching User
+			// If there is no matching Product
 			if(!optProduct.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -221,10 +224,10 @@ public class PrestacionController {
 		}
 
 		try {
-			// Get the User
+			// Get the Product
 			Optional<Product> producto = pre.getOneProduct(Id);
 
-			// If there is no matching User
+			// If there is no matching Product
 			if(!producto.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -352,7 +355,7 @@ public class PrestacionController {
 	//===============================================================================================================================================================================//
 	//===============================================================================================================================================================================//
 	@RequestMapping(value = "/service", method = {RequestMethod.GET})
-	private List<Service> getAllServ(HttpServletResponse res, @RequestHeader("token") String token,
+	private List<Service> getAllServices(HttpServletResponse res, @RequestHeader("token") String token,
 			@RequestParam (required = false) String name,
 			@RequestParam (required = false) String serv_status,
 			@RequestParam (required = false) String deleted)
@@ -366,6 +369,7 @@ public class PrestacionController {
 
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -374,7 +378,7 @@ public class PrestacionController {
 
 		try {
 
-			// Get the all the Users
+			// Get the all the Services
 			HashMap<String,Object> data = new HashMap<>();
 
 
@@ -395,9 +399,7 @@ public class PrestacionController {
 				data.put("deleted", false);
 			}
 
-			System.out.println("preAsignacion");
 			List<Service> productos = pre.getDataService(data);
-			System.out.println("postAsignacion");
 			if(productos == null){
 				// 404 Not Found
 				res.setStatus(404);
@@ -418,14 +420,12 @@ public class PrestacionController {
 	}
 	
 	@PostMapping(value = "/service")
-	public String addService(@RequestBody Service service , HttpServletResponse resp) {
-		// Valida si existe el mail y username del nuevo APP_USER
+	public String addServices(@RequestBody Service service , HttpServletResponse resp) {
+		
 		if(auth.ServicetValidation(service)) {
-			// Setea datos generales
+			
 			service.setUpdated_at(new Date());
 			service.setCreated_at(new Date());
-			// Agrega al Usuario a la BD. 
-			// Al insertar, appuser_id se asigna automaticamente, así que hay que redefinirlo al que se creó
 			service = pre.UpdateService(service);
 
 			// Status 200 y retorna el Id del APP_USER nuevo
@@ -442,7 +442,7 @@ public class PrestacionController {
 
 
 	@RequestMapping(value="/service/{Id}", method = {RequestMethod.GET})
-	private Optional<Service> getSpecificServicio(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
+	private Optional<Service> getSpecificService(HttpServletResponse res, @PathVariable("Id") String id, @RequestHeader("token") String token)
 	{
 		if(id.isEmpty() || token.isEmpty()){
 			// 400 Bad Request
@@ -453,6 +453,7 @@ public class PrestacionController {
 		// Check for authorization
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -494,6 +495,7 @@ public class PrestacionController {
 
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -551,7 +553,7 @@ public class PrestacionController {
 			// Get the User
 			Optional<Service> servicio = pre.getOneService(Id);
 
-			// If there is no matching User
+			// If there is no matching Service
 			if(!servicio.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -598,7 +600,7 @@ public class PrestacionController {
 			// Get the User
 			Optional<Service> servicio = pre.getOneService(Id);
 
-			// If there is no matching User
+			// If there is no matching Service
 			if(!servicio.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -643,7 +645,7 @@ public class PrestacionController {
 			// Get the User
 			Optional<Service> user = pre.getOneService(Id);
 
-			// If there is no matching User
+			// If there is no matching Service
 			if(!user.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -680,10 +682,17 @@ public class PrestacionController {
 	//===============================================================================================================================================================================//
 
 	@RequestMapping("/serv_status")
-	private List<Service_status> getServStatus(HttpServletResponse res){
-
+	private List<Service_status> getServStatus(HttpServletResponse res,@RequestHeader("token") String token){
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
 		try {
-			// Get the all the Users
+			// Get the all the Service status
 			List<Service_status> typeList = pre.getAllservStatus();
 
 			if(typeList == null){
@@ -704,10 +713,17 @@ public class PrestacionController {
 		}
 	}
 	@RequestMapping("/product-status")
-	private List<Product_status> getAllProductStatus(HttpServletResponse res){
-
+	private List<Product_status> getAllProductStatus(HttpServletResponse res,@RequestHeader("token") String token){
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
 		try {
-			// Get the all the Users
+			// Get the all the Product status
 			List<Product_status> typeList = pre.getAllProductStatus();
 
 			if(typeList == null){
@@ -728,10 +744,17 @@ public class PrestacionController {
 		}
 	}
 	@RequestMapping("/units")
-	private List<Unit> getAllUnits(HttpServletResponse res){
-
+	private List<Unit> getAllUnits(HttpServletResponse res,@RequestHeader("token") String token){
+		List<String> typesAllowed = new ArrayList<String>();
+		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
+		if(!auth.Authorize(token, typesAllowed)){
+			// 401 Unauthorized
+			res.setStatus(401);
+			return null;
+		}
 		try {
-			// Get the all the Users
+			// Get the all the Units
 			List<Unit> typeList = pre.getAllUnits();
 
 			if(typeList == null){
@@ -752,7 +775,7 @@ public class PrestacionController {
 		}
 	}
 	@RequestMapping("/product/low-stock")
-	private List<Product> getAllProducts(HttpServletResponse res, @RequestHeader("token") String token)
+	private List<Product> getLowStockProducts(HttpServletResponse res, @RequestHeader("token") String token)
 
 	{
 
@@ -764,6 +787,7 @@ public class PrestacionController {
 
 		List<String> typesAllowed = new ArrayList<String>();
 		typesAllowed.add("ADM");
+		typesAllowed.add("VEN");
 		if(!auth.Authorize(token, typesAllowed)){
 			// 401 Unauthorized
 			res.setStatus(401);
@@ -772,13 +796,11 @@ public class PrestacionController {
 
 		try {
 
-			// Get the all the Users
+			// Get the all the products with low stock
 			HashMap<String,Object> data = new HashMap<>();
 			data.put("deleted", false);
-			System.out.println("preAsignacion");
 			List<Product> productos = pre.getDataProduct(data);
 			List<Product> lowStock = new ArrayList<Product>();
-			System.out.println("postAsignacion");
 			if(productos == null){
 				// 404 Not Found
 				res.setStatus(404);
@@ -786,29 +808,9 @@ public class PrestacionController {
 			}
 			for(Product p : productos)
 			{
-				switch(p.getUnit_id())
+				if(p.getStock_alert()<= p.getStock())
 				{
-				case "L":
-					if(p.getStock() < 10)
-					{
-						lowStock.add(p);
-					}
-					break;
-
-				case "U":
-					if(p.getStock() < 5)
-					{
-						lowStock.add(p);
-					}
-					break;
-
-
-				case "K":
-					if(p.getStock() < 20)
-					{
-						lowStock.add(p);
-					}
-					break;
+					lowStock.add(p);
 				}
 			}
 			// 200 OK
@@ -825,3 +827,7 @@ public class PrestacionController {
 	}
 
 }
+
+//Changes 22-05-2020
+//Changed lowStock to return based on stock_alert instead of raw parameters.
+//Minor grammatical errors

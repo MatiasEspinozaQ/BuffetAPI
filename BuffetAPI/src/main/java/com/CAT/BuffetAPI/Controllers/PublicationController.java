@@ -198,8 +198,8 @@ public class PublicationController {
 		}
 		else
 		{
-			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
+			errorHeaders.set("error-code", "ERR-AUTH-004");
+			errorHeaders.set("error-desc", "Publicacion no existe");
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
 		}
 
@@ -208,7 +208,7 @@ public class PublicationController {
 
 
 	@RequestMapping(value= "/publications/{Id}/restore", method = {RequestMethod.PUT})
-	private String RestoreUser(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
+	private String RestorePub(HttpServletResponse res,@PathVariable String Id,@RequestHeader("token") String token)
 	{
 		if(token.isEmpty()){
 			// 400 Bad Request
@@ -228,7 +228,7 @@ public class PublicationController {
 			// Get the Publication
 			Optional<Publication> publication = pub.getOnePublication(Id);
 
-			// If there is no matching User
+			// If there is no matching Publication
 			if(!publication.isPresent()){
 				// 404 Not Found
 				res.setStatus(404);
@@ -298,7 +298,7 @@ public class PublicationController {
 			else
 			{
 				errorHeaders.set("error-code", "ERR-AUTH-002");
-				errorHeaders.set("error-desc", "tipo de usuario no existe");
+				errorHeaders.set("error-desc", "estatus no existe");
 				return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
 			}
 
@@ -307,7 +307,7 @@ public class PublicationController {
 		else
 		{
 			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
+			errorHeaders.set("error-desc", "Publicacion no existe");
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 	
 		}
 
@@ -380,7 +380,7 @@ public class PublicationController {
 		{
 
 			errorHeaders.set("error-code", "ERR-AUTH-001");
-			errorHeaders.set("error-desc", "Usuario no existe");
+			errorHeaders.set("error-desc", "Publicacion no existe");
 			return new ResponseEntity<JsonObject>(errorHeaders, HttpStatus.UNAUTHORIZED); 
 		}
 	}

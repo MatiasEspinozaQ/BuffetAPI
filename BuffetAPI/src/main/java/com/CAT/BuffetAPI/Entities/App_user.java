@@ -1,6 +1,9 @@
 package com.CAT.BuffetAPI.Entities;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,7 +13,10 @@ import javax.transaction.Transactional;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.CAT.BuffetAPI.Repositories.userTypeRepository;
+import com.CAT.BuffetAPI.Entities.User_type;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
@@ -18,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "APP_USER")
 @Transactional
 public class App_user {
+	
 	
 	@Id
 	@GeneratedValue(generator="db-guid")
@@ -117,12 +124,7 @@ public class App_user {
 	public void setLastlogin(Date lastlogin) {
 		this.lastlogin = lastlogin;
 	}
-	public String getUser_type_id() {
-		return user_type_id;
-	}
-	public void setUser_type_id(String user_type_id) {
-		this.user_type_id = user_type_id;
-	}
+	
 	public String getStatus_id() {
 		return status_id;
 	}
@@ -148,6 +150,12 @@ public class App_user {
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+	public String getUser_type_id() {
+		return user_type_id;
+	}
+	public void setUser_type_id(String user_type_id) {
+		this.user_type_id = user_type_id;
 	}
 	
 }
